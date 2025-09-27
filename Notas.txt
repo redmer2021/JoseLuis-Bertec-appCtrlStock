@@ -1,0 +1,45 @@
+https://hpanel.hostinger.com/
+recursoslienzovirtual@gmail.com
+Arma68on.
+
+Generar una clave hash
+php artisan tinker
+    use Illuminate\Support\Facades\Hash;
+    Hash::make('arma68on');
+exit
+
+
+
+desde el select bertec_01_compras_pend, se recorrerá toda la tabla tomando los artículos para realizar
+una consulta a bertec_01_stock_depositos por medio del código de artículo, en el listado de columnas
+agregar los campos de bertec_01_compras_pend, fusionados con los de bertec_01_stock_depositos, campos
+cod_deposito, saldo_ctrl_stock, cant_comp_stock, cant_recib_stock. Luego se realizará una consulta, también
+por el código de artículo a la tabla bertec_01_pend_entrega, de aquí seleccionamos cant_pedida, pend_desc
+pend_factu. 
+
+el select bertec_01_compras_pend, tendrá un where para seleccionar los registros donde haya algún valor en
+cant_pendiente, y para cada registro se podrá anexar una nota de 50 caracteres + la fecha de generación de
+esa nota, la fecha se grabará desde el sistema. Estas notas se grabarán en una tabla de novedades que se irá
+revisando cada vez que se genere el listado, si aún siguen apareciendo los artículos y nro-compra, entonces
+se renderizará estos campos, si ya no aparecen, irán quedando registros huerfanos hasta que se planifique una
+forma de limpiarlos de la tabla.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

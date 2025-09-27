@@ -1,0 +1,97 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+@theme {
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+.btn-uno {
+    @apply 
+        px-3
+        py-2
+        text-lg
+        font-medium
+        inline-flex
+        justify-center
+        text-white
+        bg-blue-700
+        hover:bg-blue-600
+        rounded-lg;
+  }
+  
+.btn-dos {
+    @apply 
+        px-3
+        py-2
+        text-lg
+        font-medium
+        inline-flex
+        justify-center
+        items-center
+        text-white
+        bg-red-700
+        hover:bg-red-600
+        rounded-lg
+        h-[3rem];
+  }
+
+.grillas-celdas-1{
+    @apply 
+        bg-gray-400 
+        rounded-md 
+        text-white 
+        font-bold 
+        text-[14px] 
+        flex
+        justify-center
+        items-center
+        text-center
+        whitespace-nowrap 
+        overflow-hidden 
+        text-ellipsis
+        px-2 
+        py-1;
+}
+
+.grillas-celdas-2{
+    @apply 
+        flex
+        bg-gray-200
+        rounded-md 
+        text-black
+        font-normal
+        text-[12px] 
+        px-2 
+        whitespace-nowrap 
+        overflow-hidden 
+        text-ellipsis
+        py-1;
+}
+
+.ventanaModal {
+    @apply 
+        fixed 
+        inset-0 
+        flex 
+        bg-black/50 
+        opacity-100         
+        z-50
+        transition-opacity;
+  }
+
+  .ventanaInterna_1{
+    @apply 
+        w-[40%] 
+        bg-white 
+        m-auto 
+        p-[2rem]
+        rounded-md
+        flex 
+        flex-col 
+        relative;
+}
