@@ -39,7 +39,7 @@
         </div>
     </div>
 
-    <div class="">
+    <div>
         <div class="grid gap-1 grid-cols-[50px_130px_135px_250px_100px_100px_100px_100px_100px_100px_100px_140px_100px_300px_250px]">
             <div class="grillas-celdas-1">edit</div>
             <div class="grillas-celdas-1">Nro.PED.COMPRA</div>
@@ -78,8 +78,8 @@
                 <div class="grillas-celdas-2 justify-end">{{ number_format($it['saldo_ctrl_stock'], 0)  }}</div>
                 <div class="grillas-celdas-2 justify-end">{{ number_format($it['cant_comp_stock'], 0)  }}</div>
                 <div class="grillas-celdas-2 justify-end">{{ number_format($it['faltante'], 0)  }}</div>
-                <div class="grillas-celdas-2">{{ \Carbon\Carbon::createFromFormat('d/m/Y H:i:s', $it['fec_entrega'])->format('d/m/Y') }}</div>
-                <div class="grillas-celdas-2">f.entr oc</div>
+                <div class="grillas-celdas-2 justify-center">{{ \Carbon\Carbon::createFromFormat('d/m/Y H:i:s', $it['fec_emision'])->format('d/m/Y') }}</div>
+                <div class="grillas-celdas-2 justify-center">{{ \Carbon\Carbon::createFromFormat('d/m/Y H:i:s', $it['fec_entrega'])->format('d/m/Y') }}</div>
 
                 <div class="grillas-celdas-2 justify-center">
                     {{ $it['fecCompra'] 

@@ -16,16 +16,12 @@
 
     <!-- Contenido dinámico -->
     <div wire:loading.remove>
-        @if($seleccion === 'compras')
-            @livewire('aplic.listcompras')
-        @elseif($seleccion === 'entregas')
-            @livewire('aplic.listentregas')
-        @elseif($seleccion === 'stock-depositos')
-            @livewire('aplic.listdepositos')
-        @elseif($seleccion === 'stock-ingresos')
-            @livewire('aplic.listingresos')
-        @elseif($seleccion === 'list-rev-compras')
+        @if($seleccion === 'list-rev-compras')
             @livewire('aplic.listrevcompras')
+        @elseif($seleccion === 'list-rev-ventas')
+            @livewire('aplic.listrevventas')
+        @elseif($seleccion === 'list-rev-depositos')
+            @livewire('aplic.listrevdepositos')
         @else
             <h5>Seleccione opción...</h5>
         @endif

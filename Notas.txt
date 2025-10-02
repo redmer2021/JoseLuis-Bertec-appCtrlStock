@@ -10,36 +10,26 @@ exit
 
 
 
-desde el select bertec_01_compras_pend, se recorrerá toda la tabla tomando los artículos para realizar
-una consulta a bertec_01_stock_depositos por medio del código de artículo, en el listado de columnas
-agregar los campos de bertec_01_compras_pend, fusionados con los de bertec_01_stock_depositos, campos
-cod_deposito, saldo_ctrl_stock, cant_comp_stock, cant_recib_stock. Luego se realizará una consulta, también
-por el código de artículo a la tabla bertec_01_pend_entrega, de aquí seleccionamos cant_pedida, pend_desc
-pend_factu. 
+notas para la gestión del listado de ventas
 
-el select bertec_01_compras_pend, tendrá un where para seleccionar los registros donde haya algún valor en
-cant_pendiente, y para cada registro se podrá anexar una nota de 50 caracteres + la fecha de generación de
-esa nota, la fecha se grabará desde el sistema. Estas notas se grabarán en una tabla de novedades que se irá
-revisando cada vez que se genere el listado, si aún siguen apareciendo los artículos y nro-compra, entonces
-se renderizará estos campos, si ya no aparecen, irán quedando registros huerfanos hasta que se planifique una
-forma de limpiarlos de la tabla.
+columna pedida es cant_pedida
+pend. pend_desc
+stock, comprometido y faltante, son iguales al listado revision compras
 
+Estado, fecha de modifica estado y el user se inyectan con un formulario
+los comentarios, se veran en esta pantalla, pero no se pueden editar, la edición será
+de otro usuario
 
+F. EM OC	F. ENTR OC	F. ENTR MOD	F. MODIFIC	COMENTARIOS 
+todos estos campos vienen de revisiòn de compras
 
+FECHA PEDIDO	PLAN ENTREGA	COD VEN	RAZóN SOCIAL	NRO O/COMPRA
+vienen del select bertec_01_pend_entrega
 
+la tercera pantalla es la vista depósito, esta toma del mismo select bertec_01_pend_entrega
+pero el usuario de esta pantalla es el que edita los comentarios que se ven en la vista de ventas
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+en la vista depósito y en la vista ventas, el campo ctrl pintará una celda en algún color que dependerá
+de lo que ingrese el usuario de la vista depósito, este, cuando acceda al formulario para registrar notas
+va a tildar un radiobutton que dirá completado o lo que me indiquen después y ese tilde será el que active
+la celda de color verde en las columnas ctrl de ambos listados.
