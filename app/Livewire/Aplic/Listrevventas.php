@@ -75,19 +75,13 @@ class Listrevventas extends Component
                 ->where('cod_artic', $ventas->cod_artic)
                 ->first();
 
-            // Buscar el pedido la consulta bertec_01_compras_pend
-            $compras = DB::table('bertec_01_compras_pend')
-                ->where('nro_compra', $ventas->nro_pedido)
-                ->first();
-
-            //verificar si corresponde tomar el campo pend_desc
-            $faltante = $stocks->total_cant_comp_stock - $stocks->total_saldo_ctrl_stock - $ventas->pend_desc;
-            if ($faltante<0)
-                $faltante=0;
-
-                $impoDolariz = ($ventas->cotiza && $ventas->cotiza != 0)
-                ? $ventas->importe / $ventas->cotiza
-                : 0;
+            $aRecibir = DB::table('bertec_01_compras_pend')
+                ->where('cod_artic', $ventas->cod_artic)
+                ->sum('cant_pedida');
+            
+            $impoDolariz = ($ventas->cotiza && $ventas->cotiza != 0)
+            ? $ventas->importe / $ventas->cotiza
+            : 0;
             
             $listadoFinal[] = [
                 'nro_pedido' => $ventas->nro_pedido,
@@ -98,8 +92,7 @@ class Listrevventas extends Component
                 'pend_desc' => $ventas->pend_desc,
                 'saldo_ctrl_stock'  => $stocks->total_saldo_ctrl_stock,
                 'cant_comp_stock'   => $stocks->total_cant_comp_stock,
-                'faltante' => $faltante,
-                'femoc' => $compras->fec_emision ?? null,
+                'aRecibir' => $aRecibir,
                 'fec_pedido' => $ventas->fec_pedido,
                 'plan_entrega' => $ventas->plan_entrega,
                 'cod_vend' => $ventas->cod_vend,

@@ -40,7 +40,7 @@
     </div>
 
     <div>
-        <div class="grid gap-1 grid-cols-[50px_50px_120px_150px_300px_100px_110px_110px_110px_110px_110px_110px_300px_110px_110px_110px_110px_110px_110px_110px_300px_110px_110px_110px_300px_150px_110px_110px_110px]">
+        <div class="grid gap-1 grid-cols-[50px_50px_120px_150px_300px_100px_110px_110px_110px_110px_110px_110px_100px_200px_300px_110px_110px_110px_110px_110px_100px_300px_210px_110px_110px]">
             <div class="grillas-celdas-1">edit</div>
             <div class="grillas-celdas-1">CTRL</div>
             <div class="grillas-celdas-1">NRO.PEDIDO</div>
@@ -51,14 +51,11 @@
             <div class="grillas-celdas-1">PEND.</div>
             <div class="grillas-celdas-1">STOCK</div>
             <div class="grillas-celdas-1">COMPROMET</div>
-            <div class="grillas-celdas-1">FALTANTE</div>
+            <div class="grillas-celdas-1">A RECIBIR</div>
             <div class="grillas-celdas-1">ESTADO</div>
-            <div class="grillas-celdas-1">COMENTARIOS</div>
-            <div class="grillas-celdas-1">DEPOSITO</div>
-            <div class="grillas-celdas-1">MODIF ESTADO</div>
+            <div class="grillas-celdas-1">F. MOD</div>
             <div class="grillas-celdas-1">USER</div>
-            <div class="grillas-celdas-1">F. EM OC</div>
-            <div class="grillas-celdas-1">F. ENTR OC</div>
+            <div class="grillas-celdas-1">COMENTARIOS</div>
             <div class="grillas-celdas-1">F. ENTR MOD</div>
             <div class="grillas-celdas-1">F. MODIFIC</div>
             <div class="grillas-celdas-1">COMENTARIOS</div>
@@ -69,12 +66,11 @@
             <div class="grillas-celdas-1">NRO O/COMPRA</div>
             <div class="grillas-celdas-1">IMPORTE</div>
             <div class="grillas-celdas-1">PREC-LSTA</div>
-            <div class="grillas-celdas-1">PJE</div>
 
             @foreach ($listaRevVentas as $it)
                 <div class="grillas-celdas-2 flex justify-center items-center">
                     <img wire:click="Editar()" src="{{ asset('imgs/editar.png') }}" alt="Ventas" class="cursor-pointer hover:scale-105 w-[1rem]"/>
-                </div>
+                </div>            
                 <div class="grillas-celdas-2">CTRL</div>
                 <div class="grillas-celdas-2">{{ $it['nro_pedido'] }}</div>
                 <div class="grillas-celdas-2">{{ $it['cod_artic'] }}</div>
@@ -84,16 +80,12 @@
                 <div class="grillas-celdas-2 justify-end ">{{ number_format($it['pend_desc'], 0) }}</div>
                 <div class="grillas-celdas-2 justify-end ">{{ number_format($it['saldo_ctrl_stock'], 0) }}</div>
                 <div class="grillas-celdas-2 justify-end ">{{ number_format($it['cant_comp_stock'], 0) }}</div>
-                <div class="grillas-celdas-2 justify-end ">{{ number_format($it['faltante'], 0) }}</div>
+                <div class="grillas-celdas-2 justify-end ">{{ number_format($it['aRecibir'], 0) }}</div>
                 <div class="grillas-celdas-2">ESTADO</div>
-                <div class="grillas-celdas-2">COMENTARIOS</div>
-                <div class="grillas-celdas-2">DEPOSITO</div>
-                <div class="grillas-celdas-2">MODIF ESTADO</div>
+                <div class="grillas-celdas-2">F. MOD</div>
                 <div class="grillas-celdas-2">USER</div>
-                
-                <div class="grillas-celdas-2 justify-center">{{ $it['femoc'] ? \Carbon\Carbon::createFromFormat('d/m/Y H:i:s', $it['femoc'])->format('d/m/Y') : '' }} </div>
+                <div class="grillas-celdas-2">COMENTARIOS</div>
 
-                <div class="grillas-celdas-2">F. ENTR OC</div>
                 <div class="grillas-celdas-2">F. ENTR MOD</div>
                 <div class="grillas-celdas-2">F. MODIFIC</div>
                 <div class="grillas-celdas-2">COMENTARIOS</div>
@@ -104,7 +96,24 @@
                 <div class="grillas-celdas-2">{{ $it['nro_o_compra'] }}</div>                
                 <div class="grillas-celdas-2 justify-end">{{ number_format($it['impoDolariz'], 2) }}</div>
                 <div class="grillas-celdas-2">PREC-LSTA</div>
-                <div class="grillas-celdas-2">PJE</div>    
+                    
+                {{-- 
+                    <div class="grillas-celdas-2">ESTADO</div>
+                    <div class="grillas-celdas-2">COMENTARIOS</div>
+                    <div class="grillas-celdas-2">DEPOSITO</div>
+                    <div class="grillas-celdas-2">MODIF ESTADO</div>
+                    <div class="grillas-celdas-2">USER</div> 
+                    --}}
+                
+                {{-- <div class="grillas-celdas-2 justify-center">{{ $it['femoc'] ? \Carbon\Carbon::createFromFormat('d/m/Y H:i:s', $it['femoc'])->format('d/m/Y') : '' }} </div> --}}
+                {{-- <div class="grillas-celdas-2 justify-center">femoc</div>
+
+                <div class="grillas-celdas-2">F. ENTR OC</div>
+                <div class="grillas-celdas-2">F. ENTR MOD</div>
+                <div class="grillas-celdas-2">F. MODIFIC</div>
+                <div class="grillas-celdas-2">COMENTARIOS</div>
+                <div class="grillas-celdas-2">PREC-LSTA</div>
+                <div class="grillas-celdas-2">PJE</div>     --}}
             @endforeach        
 
         </div>

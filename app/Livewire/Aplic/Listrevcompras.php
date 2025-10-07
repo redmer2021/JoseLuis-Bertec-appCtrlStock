@@ -21,9 +21,11 @@ class Listrevcompras extends Component
     public $asignardtos_a = 0;
     public $varComprobante = '';
     public $varCodArticulo = '';
-    public $fecCompra = '';
+    public $fecCompra1 = '';
+    public $comentarios1 = '';
+    public $fecCompra2 = '';
+    public $comentarios2 = '';
     public $fecModif = '';
-    public $notas = '';
     public $tipoDeGrabacion;
 
     public function CancelarEdic(){
@@ -59,35 +61,48 @@ class Listrevcompras extends Component
                     ->pluck('cod_artic');
         
                 foreach ($articulos as $articulo) {
-                   $fecha = null;
-
-                    if (!empty($this->fecCompra)) {
+                   $fecha1 = null;
+                    if (!empty($this->fecCompra1)) {
                         // Mantiene formato compatible con MySQL (YYYY-MM-DD)
-                        $fecha = Carbon::createFromFormat('Y-m-d', $this->fecCompra)->format('Y-m-d');
+                        $fecha1 = Carbon::createFromFormat('Y-m-d', $this->fecCompra1)->format('Y-m-d');
+                    }
+                   $fecha2 = null;
+                    if (!empty($this->fecCompra2)) {
+                        // Mantiene formato compatible con MySQL (YYYY-MM-DD)
+                        $fecha2 = Carbon::createFromFormat('Y-m-d', $this->fecCompra2)->format('Y-m-d');
                     }
                     
                     DB::table('bertec_01_control_movim')->insert([
                         'nroComprobante' => $this->varComprobante,
                         'codArticulo'    => $articulo,
-                        'fecCompra'      => $fecha,
-                        'fecModif'       => $this->fecCompra ? now() : null,
-                        'comentarios'    => $this->notas ?? null,
+                        'fecCompra1'      => $fecha1,
+                        'fecCompra2'      => $fecha2,
+                        'fecModif'       => $this->fecCompra1 ? now() : null,
+                        'comentarios1'    => $this->comentarios1 ?? null,
+                        'comentarios2'    => $this->comentarios2 ?? null,
                         'created_at'     => now(),
                         'updated_at'     => now(),
                     ]);
                 }
             } else {
-                    $fecha = null;
-                    if (!empty($this->fecCompra)) {
+                    $fecha1 = null;
+                    if (!empty($this->fecCompra1)) {
                         // Mantiene formato compatible con MySQL (YYYY-MM-DD)
-                        $fecha = Carbon::createFromFormat('Y-m-d', $this->fecCompra)->format('Y-m-d');
+                        $fecha1 = Carbon::createFromFormat('Y-m-d', $this->fecCompra1)->format('Y-m-d');
+                    }
+                    $fecha2 = null;
+                    if (!empty($this->fecCompra2)) {
+                        // Mantiene formato compatible con MySQL (YYYY-MM-DD)
+                        $fecha2 = Carbon::createFromFormat('Y-m-d', $this->fecCompra2)->format('Y-m-d');
                     }
                     DB::table('bertec_01_control_movim')->insert([
                     'nroComprobante' => $this->varComprobante,
                     'codArticulo'    => $this->varCodArticulo,
-                    'fecCompra'      => $fecha,
+                    'fecCompra1'      => $fecha1,
+                    'fecCompra2'      => $fecha2,
                     'fecModif'       => $this->fecCompra ? now() : null,
-                    'comentarios'    => $this->notas ?? null,
+                    'comentarios1'    => $this->comentarios1 ?? null,
+                    'comentarios2'    => $this->comentarios2 ?? null,
                     'created_at'     => now(),
                     'updated_at'     => now(),
                 ]);
@@ -101,19 +116,27 @@ class Listrevcompras extends Component
         
                 foreach ($items as $item) {
                     $updateData = [
-                        'comentarios' => $this->notas ?? null,
+                        'comentarios1' => $this->comentarios1 ?? null,
+                        'comentarios2' => $this->comentarios2 ?? null,
                         'updated_at'  => now(),
                     ];
         
-                    if ($item->fecCompra !== $this->fecCompra) {
-                        $fecha = null;
-                        if (!empty($this->fecCompra)) {
+                    if ($item->fecCompra1 !== $this->fecCompra1) {
+                        $fecha1 = null;
+                        if (!empty($this->fecCompra1)) {
                             // Mantiene formato compatible con MySQL (YYYY-MM-DD)
-                            $fecha = Carbon::createFromFormat('Y-m-d', $this->fecCompra)->format('Y-m-d');
+                            $fecha1 = Carbon::createFromFormat('Y-m-d', $this->fecCompra1)->format('Y-m-d');
                         }
 
-                        $updateData['fecCompra'] = $fecha;
+                        $updateData['fecCompra1'] = $fecha1;
                         $updateData['fecModif']  = now();
+                    }
+
+                    $fecha2 = null;
+                    if (!empty($this->fecCompra2)) {
+                        // Mantiene formato compatible con MySQL (YYYY-MM-DD)
+                        $fecha2 = Carbon::createFromFormat('Y-m-d', $this->fecCompra2)->format('Y-m-d');
+                        $updateData['fecCompra2'] = $fecha2;
                     }
                             
                     DB::table('bertec_01_control_movim')
@@ -127,19 +150,27 @@ class Listrevcompras extends Component
                     ->first();
         
                 $updateData = [
-                    'comentarios' => $this->notas ?? null,
+                    'comentarios1' => $this->comentarios1 ?? null,
+                    'comentarios2' => $this->comentarios2 ?? null,
                     'updated_at'  => now(),
                 ];
         
-                if ($item && $item->fecCompra !== $this->fecCompra) {
-                    $fecha = null;
-                    if (!empty($this->fecCompra)) {
+                if ($item && $item->fecCompra1 !== $this->fecCompra1) {
+                    $fecha1 = null;
+                    if (!empty($this->fecCompra1)) {
                         // Mantiene formato compatible con MySQL (YYYY-MM-DD)
-                        $fecha = Carbon::createFromFormat('Y-m-d', $this->fecCompra)->format('Y-m-d');
+                        $fecha1 = Carbon::createFromFormat('Y-m-d', $this->fecCompra1)->format('Y-m-d');
                     }
 
-                    $updateData['fecCompra'] = $fecha;
+                    $updateData['fecCompra1'] = $fecha1;
                     $updateData['fecModif']  = now();
+                }
+                
+                $fecha2 = null;
+                if (!empty($this->fecCompra2)) {
+                    // Mantiene formato compatible con MySQL (YYYY-MM-DD)
+                    $fecha2 = Carbon::createFromFormat('Y-m-d', $this->fecCompra2)->format('Y-m-d');
+                    $updateData['fecCompra2'] = $fecha2;
                 }
        
                 DB::table('bertec_01_control_movim')
@@ -159,9 +190,11 @@ class Listrevcompras extends Component
             'asignardtos_a',
             'varComprobante',
             'varCodArticulo',
-            'fecCompra',
+            'fecCompra1',
+            'fecCompra2',
             'fecModif',
-            'notas'
+            'comentarios1',
+            'comentarios2'
         ]);
     }
 
@@ -171,7 +204,7 @@ class Listrevcompras extends Component
 
         // Buscar datos de auditoría en bertec_01_control_movim
         $dtosAudit = DB::table('bertec_01_control_movim')
-            ->select('fecCompra','fecModif','comentarios')
+            ->select('fecCompra1','fecCompra2','fecModif','comentarios1', 'comentarios2')
             ->where('nroComprobante', $param1)
             ->where('codArticulo', $param2)
             ->first();
@@ -181,11 +214,12 @@ class Listrevcompras extends Component
         //y se actualizarán los datos.
         $this->tipoDeGrabacion = 2;
         if ($dtosAudit){
-            $this->fecCompra = $dtosAudit->fecCompra;
+            $this->fecCompra1 = $dtosAudit->fecCompra1;
+            $this->fecCompra2 = $dtosAudit->fecCompra2;
             $this->fecModif = $dtosAudit->fecModif;
-            $this->notas = $dtosAudit->comentarios;
+            $this->comentarios1 = $dtosAudit->comentarios1;
+            $this->comentarios2 = $dtosAudit->comentarios2;
             $this->tipoDeGrabacion = 1;
-            //dd('paso');
         }
 
         $this->verForm = true;
@@ -240,7 +274,6 @@ class Listrevcompras extends Component
             ->get();
         }
 
-        
         foreach ($list_compras as $compra) {
             // Buscar stock del artículo
             $stocks = DB::table('bertec_01_stock_depositos')
@@ -250,14 +283,16 @@ class Listrevcompras extends Component
             
             // Buscar datos de auditoría en bertec_01_control_movim
             $dtosAudit = DB::table('bertec_01_control_movim')
-                ->select('fecCompra','fecModif','comentarios')
+                ->select('fecCompra1','fecCompra2','fecModif','comentarios1', 'comentarios2')
                 ->where('nroComprobante', $compra->nro_compra)
                 ->where('codArticulo', $compra->cod_artic)
                 ->first();
             
-            $fecCompra='';
+            $fecCompra1='';
+            $fecCompra2='';
             $fecModif='';
-            $comentarios='';
+            $comentarios1='';
+            $comentarios2='';
             
             $faltante = $stocks->total_cant_comp_stock - $stocks->total_saldo_ctrl_stock - $compra->cant_pendiente;
 
@@ -266,9 +301,11 @@ class Listrevcompras extends Component
 
             if ($dtosAudit){
                 //dd($dtosAudit->fecCompra);
-                $fecCompra = $dtosAudit->fecCompra;
+                $fecCompra1 = $dtosAudit->fecCompra1;
+                $fecCompra2 = $dtosAudit->fecCompra2;
                 $fecModif = $dtosAudit->fecModif;
-                $comentarios = $dtosAudit->comentarios;
+                $comentarios1 = $dtosAudit->comentarios1;
+                $comentarios2 = $dtosAudit->comentarios2;
             }
 
             $listadoFinal[] = [
@@ -287,9 +324,11 @@ class Listrevcompras extends Component
                 'faltante' => $faltante,
                 
                 // dtos de auditoria
-                'fecCompra' => $fecCompra,
+                'fecCompra1' => $fecCompra1,
+                'fecCompra2' => $fecCompra2,
                 'fecModif' => $fecModif,
-                'comentarios' => $comentarios,
+                'comentarios1' => $comentarios1,
+                'comentarios2' => $comentarios2,
 
                 // Campos de stock
                 'saldo_ctrl_stock'  => $stocks->total_saldo_ctrl_stock,
@@ -300,8 +339,8 @@ class Listrevcompras extends Component
         $orden = ($this->ordenarComo == 'desc') ? 'desc' : 'asc';
 
         usort($listadoFinal, function($a, $b) use ($orden) {
-            $fechaA = strtotime($a['fecCompra']);
-            $fechaB = strtotime($b['fecCompra']);
+            $fechaA = strtotime($a['fecCompra1']);
+            $fechaB = strtotime($b['fecCompra1']);
 
             if ($orden === 'asc') {
                 return $fechaA <=> $fechaB; // Ascendente
@@ -309,8 +348,6 @@ class Listrevcompras extends Component
                 return $fechaB <=> $fechaA; // Descendente
             }
         });
-
-        //dd($listadoFinal);
 
         $this->listRevCompras = $listadoFinal;
     }

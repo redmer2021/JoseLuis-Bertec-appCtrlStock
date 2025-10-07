@@ -82,8 +82,8 @@
                 <div class="grillas-celdas-2 justify-center">{{ \Carbon\Carbon::createFromFormat('d/m/Y H:i:s', $it['fec_entrega'])->format('d/m/Y') }}</div>
 
                 <div class="grillas-celdas-2 justify-center">
-                    {{ $it['fecCompra'] 
-                        ? \Carbon\Carbon::parse($it['fecCompra'])->format('d/m/Y') 
+                    {{ $it['fecCompra1'] 
+                        ? \Carbon\Carbon::parse($it['fecCompra1'])->format('d/m/Y') 
                         : '' }}                    
                 </div>
 
@@ -93,7 +93,7 @@
                         : '' }}                                        
                 </div>
 
-                <div class="grillas-celdas-2">{{ $it['comentarios'] }}</div>
+                <div class="grillas-celdas-2">{{ $it['comentarios1'] }}</div>
                 <div class="grillas-celdas-2">{{ $it['raz_social'] }}</div>
             @endforeach        
         </div>        
@@ -107,23 +107,24 @@
         x-effect="document.body.classList.toggle('overflow-hidden', $wire.verForm)"
     >
         <div class="ventanaInterna_1 p-[8rem]">
-            <div class="grid grid-cols-12 mb-[2rem] bg-gray-300 rounded-md">
-                <div class="pl-2 flex items-center row-span-2 col-span-6">
+            <div class="grid grid-cols-12 mb-[2rem] bg-gray-300 rounded-md pr-3">
+
+                <div class="pl-2 flex items-center row-span-2 col-span-4">
                     <span>Asignar datos a:</span>
                 </div>
-                <div class="pt-2 text-xs flex justify-center col-span-3">
+                <div class="pt-2 text-xs flex justify-end col-span-4">
                     <span>Comprobante</span>
                 </div>
-                <div class="pt-2 text-xs flex justify-center col-span-3">
+                <div class="pt-2 text-xs flex justify-end col-span-4">
                     <span>Cód-Artículo</span>
                 </div>
 
-                <div class="py-2 col-span-3 flex justify-center">
+                <div class="py-2 col-span-4 flex justify-end">
                     <label class="cursor-pointer mr-2" for="op1">{{ $varComprobante }}</label>
                     <input class="cursor-pointer" wire:model="asignardtos_a" value="1" id="op1" type="radio" name="asignardtos_a">
                 </div>
 
-                <div class="py-2 col-span-3 flex justify-center">
+                <div class="py-2 col-span-4 flex justify-end">
                     <label class="cursor-pointer mr-2" for="op2">{{ $varCodArticulo }}</label>
                     <input class="cursor-pointer" wire:model="asignardtos_a" value="2" id="op2" type="radio" name="asignardtos_a">
                 </div>
@@ -137,11 +138,19 @@
             <div class="grid grid-cols-[25%_auto] mb-[2rem] gap-3">
                 <div>
                     <span class="text-xs">Fecha Entrega</span>
-                    <input wire:model="fecCompra" maxlength="50" class="bg-gray-300 p-2 rounded-md w-full" type="date">
+                    <input wire:model="fecCompra1" maxlength="50" class="bg-gray-300 p-2 rounded-md w-full" type="date">
                 </div>
                 <div>
                     <span class="text-xs">Notas:</span>
-                    <input maxlength="50" wire:model="notas" class="bg-gray-300 p-2 rounded-md w-full" type="text">
+                    <input maxlength="50" wire:model="comentarios1" class="bg-gray-300 p-2 rounded-md w-full" type="text">
+                </div>
+                <div>
+                    <span class="text-xs">Fecha Entrega 2</span>
+                    <input wire:model="fecCompra2" maxlength="50" class="bg-gray-300 p-2 rounded-md w-full" type="date">
+                </div>
+                <div>
+                    <span class="text-xs">Notas:</span>
+                    <input maxlength="50" wire:model="comentarios2" class="bg-gray-300 p-2 rounded-md w-full" type="text">
                 </div>
             </div>
 
