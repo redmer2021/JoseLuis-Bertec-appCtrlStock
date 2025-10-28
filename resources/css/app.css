@@ -86,10 +86,10 @@
 
   .ventanaInterna_1{
     @apply 
-        w-[40%] 
+        w-[98%] md:w-[40%] 
         bg-white 
         m-auto 
-        p-[2rem]
+        p-2 md:p-[2rem]
         rounded-md
         flex 
         flex-col 

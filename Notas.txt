@@ -1,6 +1,6 @@
 https://hpanel.hostinger.com/
 recursoslienzovirtual@gmail.com
-Arma68on.
+Galleta1712
 
 Generar una clave hash
 php artisan tinker
@@ -9,27 +9,18 @@ php artisan tinker
 exit
 
 
+CYP: compras_2025 - MODIFICA TODO MENOS CTRL - VE COMPRAS-VENTAS-DEPOSITO
+VTAS: ventas_2025 - MODIF ESTADO Y COMENT  DE VENTAS - VE VENTAS-DEPOSITO
+DEP: deposito_2025 - MODIF ESTADO Y CONTROL - VE DEPOSITO
+SEB: gerencia_2025 - NO MODIFICA NADA - VE COMPRAS-VENTAS-DEPOSITO Y LISTADOS
 
-notas para la gestión del listado de ventas
 
-columna pedida es cant_pedida
-pend. pend_desc
-stock, comprometido y faltante, son iguales al listado revision compras
+SELECT 
+    c.cod_artic,
+    c.*,
+    e.*
+FROM bertec_01_compras_pend AS c
+INNER JOIN bertec_01_pend_entrega AS e
+    ON c.cod_artic = e.cod_artic;
 
-Estado, fecha de modifica estado y el user se inyectan con un formulario
-los comentarios, se veran en esta pantalla, pero no se pueden editar, la edición será
-de otro usuario
 
-F. EM OC	F. ENTR OC	F. ENTR MOD	F. MODIFIC	COMENTARIOS 
-todos estos campos vienen de revisiòn de compras
-
-FECHA PEDIDO	PLAN ENTREGA	COD VEN	RAZóN SOCIAL	NRO O/COMPRA
-vienen del select bertec_01_pend_entrega
-
-la tercera pantalla es la vista depósito, esta toma del mismo select bertec_01_pend_entrega
-pero el usuario de esta pantalla es el que edita los comentarios que se ven en la vista de ventas
-
-en la vista depósito y en la vista ventas, el campo ctrl pintará una celda en algún color que dependerá
-de lo que ingrese el usuario de la vista depósito, este, cuando acceda al formulario para registrar notas
-va a tildar un radiobutton que dirá completado o lo que me indiquen después y ese tilde será el que active
-la celda de color verde en las columnas ctrl de ambos listados.
