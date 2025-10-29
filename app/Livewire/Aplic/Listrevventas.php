@@ -246,7 +246,7 @@ class Listrevventas extends Component
         } else {
             $list_ventas = DB::table('bertec_01_pend_entrega')
             ->orderBy('nro_pedido')
-            // ->limit(100)
+            ->limit(100)
             ->get();
         }
 
