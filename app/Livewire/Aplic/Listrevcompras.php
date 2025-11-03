@@ -11,7 +11,8 @@ class Listrevcompras extends Component
 {
     use WithPagination;
 
-    public $ordenarComo = 'asc';
+    public $ordenarComo1 = 'asc';
+    public $ordenarComo2 = 'asc';
     public $verForm = false;
     public $listRevCompras = [];
     public $txtBuscaNroCompras = '';
@@ -21,26 +22,39 @@ class Listrevcompras extends Component
     public $asignardtos_a = 0;
     public $varComprobante = '';
     public $varCodArticulo = '';
+    public $varDescArticulo = '';
     public $fecCompra1 = '';
     public $comentarios1 = '';
     public $fecCompra2 = '';
     public $comentarios2 = '';
+    public $unidades1 = 0;
+    public $unidades2 = 0;
     public $fecModif = '';
     public $tipoDeGrabacion;
     public $entregaParc;
+    public $cant_pendientes=0;
 
     public function CancelarEdic(){
         $this->LimpiarCampos();
         $this->verForm = false;
     }
 
-    public function Reordenar(){
-        if ($this->ordenarComo == 'desc'){
-            $this->ordenarComo = 'asc';
+    public function Reordenar1(){
+        if ($this->ordenarComo1 == 'desc'){
+            $this->ordenarComo1 = 'asc';
         } else {
-            $this->ordenarComo = 'desc';
+            $this->ordenarComo1 = 'desc';
         }
-        $this->selectDatos();
+        $this->selectDatos(1);
+    }
+
+    public function Reordenar2(){
+        if ($this->ordenarComo2 == 'desc'){
+            $this->ordenarComo2 = 'asc';
+        } else {
+            $this->ordenarComo2 = 'desc';
+        }
+        $this->selectDatos(2);
     }
 
     public function GrabarDtos(){
@@ -53,7 +67,16 @@ class Listrevcompras extends Component
                 'asignardtos_a.in'=>'Debe seleccionar seleccionar a quien asigna los datos a ingresar',
             ]
         );
+
         
+        if ($this->asignardtos_a == 2) {
+            $totalUnidades = (int)($this->unidades1 ?? 0) + (int)($this->unidades2 ?? 0);
+            
+            if ($totalUnidades > $this->cant_pendientes) {
+                $this->addError('unidades', 'La suma de unidades ingresadas no puede superar la cantidad pendiente (' . number_format($this->cant_pendientes,0) . ').');
+                return;
+            }
+        }        
         if ($this->tipoDeGrabacion == 2) {
             // === INSERCIÓN ===
             if ($this->asignardtos_a == 1) {
@@ -80,30 +103,35 @@ class Listrevcompras extends Component
                         'comentarios1'    => $this->comentarios1 ?? null,
                         'comentarios2'    => $this->comentarios2 ?? null,
                         'entregaParc' => $this->entregaParc ? 1 : 2,
+                        'user' => auth()->user()->name,
                         'created_at'     => now(),
                         'updated_at'     => now(),
                     ]);
                 }
             } else {
-                    $fecha1 = null;
-                    if (!empty($this->fecCompra1)) {
-                        $fecha1 = Carbon::createFromFormat('Y-m-d', $this->fecCompra1)->format('Y-m-d');
-                    }
-                    $fecha2 = null;
-                    if (!empty($this->fecCompra2)) {
-                        $fecha2 = Carbon::createFromFormat('Y-m-d', $this->fecCompra2)->format('Y-m-d');
-                    }
-                    DB::table('bertec_01_control_compras')->insert([
-                    'nroComprobante' => $this->varComprobante,
-                    'codArticulo'    => $this->varCodArticulo,
-                    'fecCompra1'      => $fecha1,
-                    'fecCompra2'      => $fecha2,
-                    'fecModif'       => $this->fecCompra ? now() : null,
-                    'comentarios1'    => $this->comentarios1 ?? null,
-                    'comentarios2'    => $this->comentarios2 ?? null,
-                    'entregaParc' => $this->entregaParc ? 1 : 2,
-                    'created_at'     => now(),
-                    'updated_at'     => now(),
+                $fecha1 = null;
+                if (!empty($this->fecCompra1)) {
+                    $fecha1 = Carbon::createFromFormat('Y-m-d', $this->fecCompra1)->format('Y-m-d');
+                }
+                $fecha2 = null;
+                if (!empty($this->fecCompra2)) {
+                    $fecha2 = Carbon::createFromFormat('Y-m-d', $this->fecCompra2)->format('Y-m-d');
+                }
+
+                DB::table('bertec_01_control_compras')->insert([
+                'nroComprobante' => $this->varComprobante,
+                'codArticulo'    => $this->varCodArticulo,
+                'fecCompra1'      => $fecha1,
+                'fecCompra2'      => $fecha2,
+                'fecModif'       => $this->fecCompra1 ? now() : null,
+                'comentarios1'    => $this->comentarios1 ?? null,
+                'comentarios2'    => $this->comentarios2 ?? null,
+                'unidades1' => (int)$this->unidades1 ?? 0,
+                'unidades2' => (int)$this->unidades2 ?? 0,
+                'entregaParc' => $this->entregaParc ? 1 : 2,
+                'user' => auth()->user()->name,
+                'created_at'     => now(),
+                'updated_at'     => now(),
                 ]);
             }
         } else {
@@ -118,6 +146,7 @@ class Listrevcompras extends Component
                         'comentarios1' => $this->comentarios1 ?? null,
                         'comentarios2' => $this->comentarios2 ?? null,
                         'entregaParc' => $this->entregaParc ? 1 : 2,
+                        'user' => auth()->user()->name,
                         'updated_at'  => now(),
                     ];
         
@@ -152,7 +181,10 @@ class Listrevcompras extends Component
                 $updateData = [
                     'comentarios1' => $this->comentarios1 ?? null,
                     'comentarios2' => $this->comentarios2 ?? null,
+                    'unidades1' => (int)$this->unidades1 ?? 0,
+                    'unidades2' => (int)$this->unidades2 ?? 0,
                     'entregaParc' => $this->entregaParc ? 1 : 2,
+                    'user' => auth()->user()->name,
                     'updated_at'  => now(),
                 ];
         
@@ -196,18 +228,22 @@ class Listrevcompras extends Component
             'fecModif',
             'comentarios1',
             'comentarios2',
+            'unidades1',
+            'unidades2',
             'entregaParc'
         ]);
     }
 
-    public function Editar($param1, $param2){
+    public function Editar($param1, $param2, $param3, $param4){
         $this->resetErrorBag();
         $this->varComprobante = $param1;
         $this->varCodArticulo = $param2;
+        $this->cant_pendientes = $param3;
+        $this->varDescArticulo = $param4;
 
         // Buscar datos de auditoría en bertec_01_control_compras
         $dtosAudit = DB::table('bertec_01_control_compras')
-            ->select('fecCompra1','fecCompra2','fecModif','comentarios1', 'comentarios2', 'entregaParc')
+            ->select('fecCompra1','fecCompra2','fecModif','comentarios1', 'comentarios2', 'unidades1', 'unidades2', 'entregaParc')
             ->where('nroComprobante', $param1)
             ->where('codArticulo', $param2)
             ->first();
@@ -222,6 +258,8 @@ class Listrevcompras extends Component
             $this->fecModif = $dtosAudit->fecModif;
             $this->comentarios1 = $dtosAudit->comentarios1;
             $this->comentarios2 = $dtosAudit->comentarios2;
+            $this->unidades1 = $dtosAudit->unidades1;
+            $this->unidades2 = $dtosAudit->unidades2;
             $this->entregaParc = $dtosAudit->entregaParc == 1 ? true : false;
 
             $this->tipoDeGrabacion = 1;
@@ -230,25 +268,11 @@ class Listrevcompras extends Component
         $this->verForm = true;
     }
 
-    public function Buscar1(){
-        $this->txtBuscaDescArtic = '';
-        $this->txtBuscaRazSocial = '';
+    public function Buscar(){
         $this->selectDatos();
     }
 
-    public function Buscar2(){
-        $this->txtBuscaNroCompras = '';
-        $this->txtBuscaRazSocial = '';
-        $this->selectDatos();
-    }
-
-    public function Buscar3(){
-        $this->txtBuscaNroCompras = '';
-        $this->txtBuscaDescArtic = '';
-        $this->selectDatos();
-    }
-
-    protected function selectDatos(){
+    protected function selectDatos($columOrden = 0){
         $listadoFinal = [];
         
         // Normalizar textos (eliminar espacios a ambos lados)
@@ -256,28 +280,21 @@ class Listrevcompras extends Component
         $this->txtBuscaDescArtic  = trim($this->txtBuscaDescArtic);
         $this->txtBuscaRazSocial    = trim($this->txtBuscaRazSocial);
 
-        // Traer compras 
-        if ($this->txtBuscaNroCompras!=''){
-            $list_compras = DB::table('bertec_01_compras_pend')
-            ->where('nro_compra', 'like', '%' . $this->txtBuscaNroCompras . '%')
+        // Construir query dinámica
+        $list_compras = DB::table('bertec_01_compras_pend')
+            ->when($this->txtBuscaNroCompras != '', function ($query) {
+                $query->where('nro_compra', 'like', '%' . $this->txtBuscaNroCompras . '%');
+            })
+            ->when($this->txtBuscaDescArtic != '', function ($query) {
+                $query->where('descrip', 'like', '%' . $this->txtBuscaDescArtic . '%');
+            })
+            ->when($this->txtBuscaRazSocial != '', function ($query) {
+                $query->where('raz_social', 'like', '%' . $this->txtBuscaRazSocial . '%');
+            })
             ->orderBy('nro_compra')
+            // ->limit(100)
             ->get();
-        } else if ($this->txtBuscaDescArtic!=''){
-            $list_compras = DB::table('bertec_01_compras_pend')
-            ->where('descrip', 'like', '%' . $this->txtBuscaDescArtic . '%')
-            ->orderBy('nro_compra')
-            ->get();
-        } else if ($this->txtBuscaRazSocial!=''){
-            $list_compras = DB::table('bertec_01_compras_pend')
-            ->where('raz_social', 'like', '%' . $this->txtBuscaRazSocial . '%')
-            ->orderBy('nro_compra')
-            ->get();
-        } else {
-            $list_compras = DB::table('bertec_01_compras_pend')
-            ->orderBy('nro_compra')
-            ->limit(100)
-            ->get();
-        }
+
 
         foreach ($list_compras as $compra) {
             // Buscar stock del artículo
@@ -288,7 +305,7 @@ class Listrevcompras extends Component
             
             // Buscar datos de auditoría en bertec_01_control_compras
             $dtosAudit = DB::table('bertec_01_control_compras')
-                ->select('fecCompra1','fecCompra2','fecModif','comentarios1', 'comentarios2', 'entregaParc')
+                ->select('fecCompra1','fecCompra2','fecModif','comentarios1', 'comentarios2', 'unidades1', 'unidades2', 'entregaParc', 'user')
                 ->where('nroComprobante', $compra->nro_compra)
                 ->where('codArticulo', $compra->cod_artic)
                 ->first();
@@ -298,7 +315,10 @@ class Listrevcompras extends Component
             $fecModif='';
             $comentarios1='';
             $comentarios2='';
+            $unidades1=0;
+            $unidades2=0;
             $entregaParc='';
+            $user='';
 
             $faltante = max(0, $stocks->total_cant_comp_stock - $stocks->total_saldo_ctrl_stock - $compra->cant_pendiente);
 
@@ -311,7 +331,10 @@ class Listrevcompras extends Component
                 $fecModif = $dtosAudit->fecModif;
                 $comentarios1 = $dtosAudit->comentarios1;
                 $comentarios2 = $dtosAudit->comentarios2;
+                $unidades1 = $dtosAudit->unidades1;
+                $unidades2 = $dtosAudit->unidades2;
                 $entregaParc = $dtosAudit->entregaParc;
+                $user = $dtosAudit->user;
             }
 
             $listadoFinal[] = [
@@ -335,7 +358,10 @@ class Listrevcompras extends Component
                 'fecModif' => $fecModif,
                 'comentarios1' => $comentarios1,
                 'comentarios2' => $comentarios2,
+                'unidades1' => $unidades1,
+                'unidades2' => $unidades2,
                 'entregaParc' => $entregaParc,
+                'user' => $user,
 
                 // Campos de stock
                 'saldo_ctrl_stock'  => $stocks->total_saldo_ctrl_stock,
@@ -343,18 +369,32 @@ class Listrevcompras extends Component
             ];
         }
 
-        $orden = ($this->ordenarComo == 'desc') ? 'desc' : 'asc';
-
-        usort($listadoFinal, function($a, $b) use ($orden) {
-            $fechaA = strtotime($a['fecCompra1']);
-            $fechaB = strtotime($b['fecCompra1']);
-
-            if ($orden === 'asc') {
-                return $fechaA <=> $fechaB; // Ascendente
-            } else {
-                return $fechaB <=> $fechaA; // Descendente
-            }
-        });
+        if ($columOrden == 1){
+            $this->ordenarComo2 = 'asc';
+            $orden = ($this->ordenarComo1 == 'desc') ? 'desc' : 'asc';
+            usort($listadoFinal, function($a, $b) use ($orden) {
+                $fechaA = strtotime($a['fecCompra1']);
+                $fechaB = strtotime($b['fecCompra1']);
+    
+                if ($orden === 'asc') {
+                    return $fechaA <=> $fechaB; // Ascendente
+                } else {
+                    return $fechaB <=> $fechaA; // Descendente
+                }
+            });
+        } else if ($columOrden == 2){
+            $this->ordenarComo1 = 'asc';
+            $orden = ($this->ordenarComo2 == 'desc') ? 'desc' : 'asc';
+            usort($listadoFinal, function($a, $b) use ($orden) {
+                $estA = $a['faltante'];
+                $estB = $b['faltante'];
+                if ($orden === 'asc') {
+                    return $estA <=> $estB; // Ascendente
+                } else {
+                    return $estB <=> $estA; // Descendente
+                }
+            });
+        }
 
         $this->listRevCompras = $listadoFinal;
     }

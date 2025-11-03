@@ -16,23 +16,19 @@
     <span class="font-bold md:text-[1.5rem]">REVISIÓN COMPRAS</span>
     
     <div class="w-full my-[1rem]">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+        <div class="grid grid-cols-1 md:grid-cols-[1fr_1fr_2fr_1fr] gap-3 w-[50%]">
             <div class="flex bg-gray-300 rounded-md">
                 <input wire:model="txtBuscaNroCompras" type="text" class="p-2 w-full focus:outline-none focus:ring-0" placeholder="Nro. Ped. Compra">
-                <button class="p-2 cursor-pointer" wire:click="Buscar1()">
-                    <img src="{{ asset('imgs/lupa.png') }}" alt="lupa" class="h-8 w-8">
-                </button>
             </div>
             <div class="flex bg-gray-300 rounded-md">
                 <input wire:model="txtBuscaDescArtic" type="text" class="p-2 w-full focus:outline-none focus:ring-0" placeholder="Descripción artículo">
-                <button class="p-2 cursor-pointer" wire:click="Buscar2()">
-                    <img src="{{ asset('imgs/lupa.png') }}" alt="lupa" class="h-8 w-8">
-                </button>
             </div>
 
             <div class="flex bg-gray-300 rounded-md">
                 <input wire:model="txtBuscaRazSocial" type="text" class="p-2 w-full focus:outline-none focus:ring-0" placeholder="Proveedor">
-                <button class="p-2 cursor-pointer" wire:click="Buscar3()">
+            </div>
+            <div>
+                <button class="p-2 cursor-pointer" wire:click="Buscar()">
                     <img src="{{ asset('imgs/lupa.png') }}" alt="lupa" class="h-8 w-8">
                 </button>
             </div>
@@ -40,7 +36,7 @@
     </div>
 
     <div>
-        <div class="grid gap-1 grid-cols-[50px_130px_135px_300px_60px_60px_60px_60px_60px_100px_100px_140px_100px_300px_250px]">
+        <div class="grid gap-1 grid-cols-[50px_130px_135px_300px_60px_60px_60px_60px_80px_100px_100px_140px_100px_300px_100px_250px]">
             <div class="grillas-celdas-1">edit</div>
             <div class="grillas-celdas-1">Nro.PED.COMPRA</div>
             <div class="grillas-celdas-1">ARTICULO</div>
@@ -49,31 +45,45 @@
             <div class="grillas-celdas-1">PEND</div>
             <div class="grillas-celdas-1">STOCK</div>
             <div class="grillas-celdas-1">COMPR.</div>
-            <div class="grillas-celdas-1">FALT.</div>
+            <div class="grillas-celdas-1 !justify-between">
+                <span wire:click="Reordenar2()" class="cursor-pointer">
+                    FALT.
+                </span>
+                @if ($ordenarComo2 == 'desc')
+                    <img wire:click="Reordenar2()" src="{{ asset('imgs/orden-descendiente.png') }}" alt="Orden" class="h-5 w-5 cursor-pointer">
+                @else
+                    <img wire:click="Reordenar2()" src="{{ asset('imgs/orden-ascendente.png') }}" alt="Orden" class="h-5 w-5 cursor-pointer">
+                @endif
+            </div>
             <div class="grillas-celdas-1">FE EM OC</div>
             <div class="grillas-celdas-1">F.ENTR OC</div>
             <div class="grillas-celdas-1 !justify-between">
-                <span wire:click="Reordenar()" class="cursor-pointer">
+                <span wire:click="Reordenar1()" class="cursor-pointer">
                     F. ENTR MOD
                 </span>
-                @if ($ordenarComo == 'desc')
-                    <img wire:click="Reordenar()" src="{{ asset('imgs/orden-descendiente.png') }}" alt="Orden" class="h-5 w-5 cursor-pointer">
+                @if ($ordenarComo1 == 'desc')
+                    <img wire:click="Reordenar1()" src="{{ asset('imgs/orden-descendiente.png') }}" alt="Orden" class="h-5 w-5 cursor-pointer">
                 @else
-                    <img wire:click="Reordenar()" src="{{ asset('imgs/orden-ascendente.png') }}" alt="Orden" class="h-5 w-5 cursor-pointer">
+                    <img wire:click="Reordenar1()" src="{{ asset('imgs/orden-ascendente.png') }}" alt="Orden" class="h-5 w-5 cursor-pointer">
                 @endif
             </div>
             <div class="grillas-celdas-1">F.MOD</div>
             <div class="grillas-celdas-1">COMENTARIOS</div>
+            <div class="grillas-celdas-1">USER</div>
             <div class="grillas-celdas-1">PROVEEDOR</div>
         
             @foreach ($listRevCompras as $it)
-                <div class="grillas-celdas-2 flex justify-center items-center">
-                    @if (in_array(auth()->user()->name, ['CYP']))
-                        <img wire:click="Editar('{{ $it['nro_compra'] }}', '{{ $it['cod_artic'] }}')" src="{{ asset('imgs/editar.png') }}" alt="Compras pendientes" class="cursor-pointer hover:scale-105 w-[1rem]" />
-                    @else
+                @if (in_array(auth()->user()->name, ['CYP']))
+                    <div wire:click="Editar('{{ $it['nro_compra'] }}', '{{ $it['cod_artic'] }}', '{{ $it['cant_pendiente'] }}', '{{ $it['descripcion'] }}' )" class="cursor-pointer grillas-celdas-2 flex justify-center items-center">
                         <img src="{{ asset('imgs/editar.png') }}" alt="Compras pendientes" class="w-[1rem]" />
-                    @endif
-                </div>
+                    </div>
+                @else
+                    <div class="grillas-celdas-2 flex justify-center items-center">
+                        <img src="{{ asset('imgs/editar.png') }}" alt="Compras pendientes" class="w-[1rem]" />
+                    </div>
+                @endif
+        
+                
                 <div class="grillas-celdas-2">{{ $it['nro_compra'] }}</div>
                 <div class="grillas-celdas-2">{{ $it['cod_artic'] }}</div>
                 <div class="grillas-celdas-2">{{ $it['descripcion'] }}</div>
@@ -101,6 +111,7 @@
                 </div>
 
                 <div class="grillas-celdas-2">{{ $it['comentarios1'] }}</div>
+                <div class="grillas-celdas-2">{{ $it['user'] }}</div>
                 <div class="grillas-celdas-2">{{ $it['raz_social'] }}</div>
             @endforeach        
         </div>        
@@ -114,38 +125,42 @@
         x-effect="document.body.classList.toggle('overflow-hidden', $wire.verForm)"
     >
         <div class="ventanaInterna_1 p-[8rem]">
-            <div class="grid grid-cols-12 mb-[2rem] bg-gray-300 rounded-md pr-3">
+            <div class="grid grid-cols-[1fr_1fr_2fr] mb-[2rem] bg-gray-300 rounded-md pr-3">
 
-                <div class="pl-2 flex items-center row-span-12 md:row-span-2 col-span-4">
+                <div class="pl-2 row-span-2 flex items-center">
                     <span>Asignar datos a:</span>
                 </div>
-                <div class="pt-2 text-xs flex justify-end row-span-12 md:col-span-4">
+                <div class="pt-2 text-xs flex justify-end">
                     <span>Comprobante</span>
                 </div>
-                <div class="pt-2 text-xs flex justify-end row-span-12 md:col-span-4">
+                <div class="pt-2 text-xs flex justify-end">
                     <span>Cód-Artículo</span>
                 </div>
 
-                <div class="py-2 row-span-12 md:col-span-4 flex justify-end">
+                <div class="py-2 flex justify-end">
                     <label class="cursor-pointer mr-2" for="op1">{{ $varComprobante }}</label>
                     <input class="cursor-pointer" wire:model="asignardtos_a" value="1" id="op1" type="radio" name="asignardtos_a">
                 </div>
 
-                <div class="py-2 row-span-12 md:col-span-4 flex justify-end">
-                    <label class="cursor-pointer mr-2" for="op2">{{ $varCodArticulo }}</label>
+                <div class="py-2 flex justify-end">
+                    <label class="cursor-pointer mr-2" for="op2">{{ $varDescArticulo }}</label>
                     <input class="cursor-pointer" wire:model="asignardtos_a" value="2" id="op2" type="radio" name="asignardtos_a">
-                </div>
+                </div>                
                 @error('asignardtos_a')
-                    <div class="col-span-12 flex justify-center mb-2">
+                    <div class="col-span-3 flex justify-center mb-2">
                         <span class="block text-red-600 mt-1">{{$message}}</span>
                     </div>
                 @enderror
             </div>
             
-            <div class="grid md:grid-cols-[25%_auto] mb-[2rem] gap-3">
+            <div class="grid md:grid-cols-[25%_12%_auto] mb-[2rem] gap-3">
                 <div>
-                    <span class="text-xs">Fecha Entrega</span>
+                    <span class="text-xs">Fecha Entrega 1</span>
                     <input wire:model="fecCompra1" maxlength="50" class="bg-gray-300 p-2 rounded-md w-full" type="date">
+                </div>
+                <div>
+                    <span class="text-xs">Unidades 1</span>
+                    <input :disabled="$wire.asignardtos_a != 2" wire:model="unidades1" maxlength="5" class="bg-gray-300 p-2 rounded-md w-full text-right" type="text">
                 </div>
                 <div>
                     <span class="text-xs">Notas:</span>
@@ -154,6 +169,10 @@
                 <div>
                     <span class="text-xs">Fecha Entrega 2</span>
                     <input wire:model="fecCompra2" maxlength="50" class="bg-gray-300 p-2 rounded-md w-full" type="date">
+                </div>
+                <div>
+                    <span class="text-xs">Unidades 2</span>
+                    <input :disabled="$wire.asignardtos_a != 2" wire:model="unidades2" maxlength="5" class="bg-gray-300 p-2 rounded-md w-full text-right" type="text">
                 </div>
                 <div>
                     <span class="text-xs">Notas:</span>
@@ -165,6 +184,12 @@
                 <label class="cursor-pointer text-sm" for="entregParc">Entregas Parciales</label>
                 <input id="entregParc" wire:model="entregaParc" type="checkbox" class="w-4 h-4 text-blue-600">
             </div>
+
+            @error('unidades')
+                <div class="col-span-3 flex justify-center mb-2">
+                    <span class="block text-red-600 mt-1">{{$message}}</span>
+                </div>
+            @enderror
 
             <div class="flex justify-center md:justify-end">
                 <button wire:click="CancelarEdic()" class="w-[10rem] mr-2 cursor-pointer bg-red-400 hover:bg-red-600 hover:text-white transition-colors duration-200 font-bold px-5 py-3 rounded-md text-black">Cancelar</button>

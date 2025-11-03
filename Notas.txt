@@ -24,3 +24,147 @@ INNER JOIN bertec_01_pend_entrega AS e
     ON c.cod_artic = e.cod_artic;
 
 
+En la exportaci�n de la tabla bertec_01_pend_entrega, verificar los art�culos y exportar solo los que se encuentran referenciados en bertec_01_pend_entrega
+la ficha de compras, se tiene que ver desde el usuario de ventas.
+Agregar los procedimientos para exportar los datos a un csv
+En la pantalla de ventas y de dep�sitos hay que agregar un calendario para que el usuario especifique la fecha con la que se usar� el nuevo SELECT
+que hay que integrar a la api
+
+En zeocar, hay que ajustar la cantidad de caracteres que se toman en la pantalla de generaci�n de los pedidos.
+Ver la forma de evitar que se dispare mas de una instancia de la api de env�o de datos.
+
+
+CREATE OR ALTER PROCEDURE bertec_01_stock_anterior
+    @fechaDesde DATETIME,
+    @fechaHasta DATETIME
+AS
+BEGIN
+    SET NOCOUNT ON;
+    DECLARE @__Entrada_Key_36 nvarchar(1) = N'E';
+    DECLARE @__Factura_Key_1 nvarchar(2) = N'FC';
+    DECLARE @__FacturaRemito_Key_2 nvarchar(2) = N'FR';
+    DECLARE @__NotaDeCredito_Key_3 nvarchar(2) = N'CC';
+    DECLARE @__NotaDeDebito_Key_4 nvarchar(2) = N'DC';
+    DECLARE @__Recibo_Key_5 nvarchar(2) = N'RC';
+    DECLARE @__Remito_Key_6 nvarchar(2) = N'RE';
+    DECLARE @__DevolucionDeRemito_Key_7 nvarchar(2) = N'DR';
+    DECLARE @__ME_Key_23 nvarchar(2) = N'ME';
+    DECLARE @__CR_Key_24 nvarchar(2) = N'CR';
+    DECLARE @__Transferencia_Key_31 nvarchar(2) = N'TI';
+    DECLARE @__Entrada_Key_32 nvarchar(2) = N'VE';
+    DECLARE @__Salida_Key_33 nvarchar(2) = N'VS';
+    DECLARE @__Ocasional_Value_34 nvarchar(60) = N'Ocasional';
+    DECLARE @__Factura_Key_9 nvarchar(2) = N'FP';
+    DECLARE @__FacturaRemito_Key_10 nvarchar(2) = N'FS';
+    DECLARE @__NotaDeCredito_Key_11 nvarchar(2) = N'CP';
+    DECLARE @__NotaDeDebito_Key_12 nvarchar(2) = N'DP';
+    DECLARE @__OrdenPago_Key_13 nvarchar(2) = N'OP';
+    DECLARE @__Remito_Key_14 nvarchar(2) = N'RP';
+    DECLARE @__DevolucionDeRemito_Key_15 nvarchar(2) = N'DS';
+    DECLARE @__Ajuste_Key_17 nvarchar(2) = N'AJ';
+    DECLARE @__Armado_Key_18 nvarchar(2) = N'AR';
+    DECLARE @__Transferencia_Key_19 nvarchar(2) = N'TI';
+    DECLARE @__Entrada_Key_21 nvarchar(2) = N'VE';
+    DECLARE @__Salida_Key_20 nvarchar(2) = N'VS';
+    DECLARE @__Stock_Value_35 nvarchar(60) = N'Stock';
+    DECLARE @__Base_Key_0 nvarchar(1) = N'B';
+    DECLARE @__Ventas_Key_8 nvarchar(3) = N'GV';
+    DECLARE @__Compras_Key_16 nvarchar(3) = N'CP';
+    DECLARE @__Stock_Key_22 nvarchar(3) = N'ST';
+    DECLARE @__CajaResto_Key_25 nvarchar(3) = N'TR';
+    DECLARE @__NoGenereMovimiento_Key_26 nvarchar(1) = N'X';
+    DECLARE @__p_27 datetime = '2025-10-01T00:00:00.000';
+    DECLARE @__p_28 datetime = '2025-10-31T00:00:00.000';
+    DECLARE @__ToUpper_29 nvarchar(4000) = N'COMPRAS';
+
+    SET DEADLOCK_PRIORITY -8;
+
+SELECT [t1].[ID_STA140] AS [ID_STA14], [t1].[ID_GVA12], [t1].[ID_CPA04], [t1].[ID_STA110] AS [ID_STA11], [t1].[FECHA_MOV0] AS N'Fecha de comprobante', [t1].[T_COMP] AS N'Tipo comprobante', [t1].[N_COMP] AS N'Nro. comprobante', [t1].[TCOMP_IN_S0] AS [COMPROBANTE], [t1].[COD_ARTICU] AS N'Cód. artículo', [t1].[DESCRIPCIO] AS N'Desc. artículo', [t1].[NCOMP_IN_S0] AS [NRO_INTERNO_STOCK], [t1].[COD_PRO_CL] AS N'Cód. cliente / proveedor', [t1].[CLIENTEPROVEEDOR] AS N'Cliente/proveedor', [t1].[FECHA_INGRESO] AS N'Fecha emisión', [t1].[SIGLA_MEDIDA1] AS N'U.m. stock', COALESCE(SUM(CASE
+    WHEN [t1].[TIPO_MOV] = @__Entrada_Key_36 THEN COALESCE(CASE
+        WHEN [t1].[USA_SERIE] = CAST(1 AS bit) THEN CASE
+            WHEN [t1].[ID_STA07] IS NOT NULL THEN 1.0
+            ELSE NULL
+        END
+        WHEN [t1].[USA_PARTID] = CAST(1 AS bit) THEN [t1].[CANTIDAD0]
+        ELSE [t1].[CANTIDAD]
+    END, [t1].[CANTIDAD])
+    ELSE -COALESCE(CASE
+        WHEN [t1].[USA_SERIE] = CAST(1 AS bit) THEN CASE
+            WHEN [t1].[ID_STA07] IS NOT NULL THEN 1.0
+            ELSE NULL
+        END
+        WHEN [t1].[USA_PARTID] = CAST(1 AS bit) THEN [t1].[CANTIDAD0]
+        ELSE [t1].[CANTIDAD]
+    END, [t1].[CANTIDAD])
+END), 0.0) AS N'Cantidad', [t1].[PRECIO] AS N'Precio', COALESCE(SUM(CASE
+    WHEN [t1].[USA_PARTID] = CAST(1 AS bit) THEN [t1].[CANTIDAD0] * [t1].[PRECIO]
+    ELSE [t1].[CANTIDAD] * [t1].[PRECIO]
+END), 0.0) AS N'Total renglón', [t1].[USUARIO] AS N'Usuario', [t1].[TCOMP_IN_C] AS [TIPO_INTERNO], [t1].[NRO_INTERNO]
+
+FROM (
+    SELECT [s].[CANTIDAD], [s].[COD_ARTICU], [s].[PRECIO], [s].[TIPO_MOV], [s0].[ID_STA14] AS [ID_STA140], [s0].[COD_PRO_CL], [s0].[FECHA_INGRESO], [s0].[FECHA_MOV] AS [FECHA_MOV0], [s0].[NCOMP_IN_S] AS [NCOMP_IN_S0], [s0].[N_COMP], [s0].[TCOMP_IN_S] AS [TCOMP_IN_S0], [s0].[T_COMP], [s0].[USUARIO], [s4].[ID_STA11] AS [ID_STA110], [s4].[DESCRIPCIO], [s4].[USA_PARTID], [s4].[USA_SERIE], [s9].[CANTIDAD] AS [CANTIDAD0], [s11].[ID_STA07], [m1].[SIGLA_MEDIDA] AS [SIGLA_MEDIDA1], [c0].[ID_CPA04], [c0].[TCOMP_IN_C], [g1].[ID_GVA12], CASE
+        WHEN [s0].[TCOMP_IN_S] IN (@__Factura_Key_1, @__FacturaRemito_Key_2, @__NotaDeCredito_Key_3, @__NotaDeDebito_Key_4, @__Recibo_Key_5, @__Remito_Key_6, @__DevolucionDeRemito_Key_7, @__ME_Key_23, @__CR_Key_24, @__Transferencia_Key_31, @__Entrada_Key_32, @__Salida_Key_33) THEN CASE
+            WHEN [s0].[COD_PRO_CL] = N'000000' THEN @__Ocasional_Value_34
+            ELSE [g].[RAZON_SOCI]
+        END
+        WHEN [s0].[TCOMP_IN_S] IN (@__Factura_Key_9, @__FacturaRemito_Key_10, @__NotaDeCredito_Key_11, @__NotaDeDebito_Key_12, @__OrdenPago_Key_13, @__Remito_Key_14, @__DevolucionDeRemito_Key_15) THEN [c].[NOM_PROVEE]
+        WHEN [s0].[TCOMP_IN_S] IN (@__Ajuste_Key_17, @__Armado_Key_18, @__Transferencia_Key_19, @__Entrada_Key_21, @__Salida_Key_20) THEN N''
+        WHEN [s0].[TCOMP_IN_S] = N'' THEN @__Stock_Value_35
+        ELSE NULL
+    END AS [CLIENTEPROVEEDOR], CAST([c0].[NCOMP_IN_C] AS decimal(18,2)) AS [NRO_INTERNO]
+    FROM [STA20] AS [s]
+    INNER JOIN [STA14] AS [s0] ON [s].[ID_STA14] = [s0].[ID_STA14]
+    LEFT JOIN [STA17] AS [s1] ON [s0].[TALONARIO] = [s1].[TALONARIO]
+    LEFT JOIN [GVA14] AS [g] ON [s0].[COD_PRO_CL] = [g].[COD_CLIENT]
+    LEFT JOIN [CPA01] AS [c] ON [s0].[COD_PRO_CL] = [c].[COD_PROVEE]
+    LEFT JOIN [STA22] AS [s2] ON [s].[COD_DEPOSI] = [s2].[COD_SUCURS]
+    LEFT JOIN [STA22] AS [s3] ON [s].[COD_DEPOSI_INGRESO] = [s3].[COD_SUCURS]
+    LEFT JOIN [STA11] AS [s4] ON [s].[ID_STA11] = [s4].[ID_STA11]
+    LEFT JOIN [AXV_LIVE_STA11FAMILIA_GRUPO_INDIVIDUO] AS [a] ON [s4].[ID_STA11] = [a].[ID_STA11]
+    LEFT JOIN [AXV_LIVE_STA14SUCURSAL] AS [a0] ON [s0].[ID_STA14] = [a0].[ID_STA14]
+    LEFT JOIN [GVA81] AS [g0] ON [s].[COD_CLASIF] = [g0].[COD_CLASIF]
+    LEFT JOIN [STA32] AS [s5] ON [s4].[ID_STA32_ESCALA_1] = [s5].[ID_STA32]
+    LEFT JOIN [STA32] AS [s6] ON [s4].[ID_STA32_ESCALA_2] = [s6].[ID_STA32]
+    LEFT JOIN [STA33] AS [s7] ON [s4].[ID_STA33_VALOR1] = [s7].[ID_STA33] AND [s4].[ID_STA32_ESCALA_1] = [s7].[ID_STA32]
+    LEFT JOIN [STA33] AS [s8] ON [s4].[ID_STA33_VALOR2] = [s8].[ID_STA33] AND [s4].[ID_STA32_ESCALA_2] = [s8].[ID_STA32]
+    LEFT JOIN [STA09] AS [s9] ON [s].[NCOMP_IN_S] = [s9].[NCOMP_IN_S] AND [s].[TCOMP_IN_S] = [s9].[TCOMP_IN_S] AND [s].[N_RENGL_S] = [s9].[N_RENGL_S]
+    LEFT JOIN [STA08] AS [s10] ON [s9].[N_PARTIDA] = [s10].[N_PARTIDA]
+    LEFT JOIN [STA07] AS [s11] ON [s].[NCOMP_IN_S] = [s11].[NCOMP_IN_S] AND ([s].[TCOMP_IN_S] = [s11].[TCOMP_IN_S] OR ([s].[TCOMP_IN_S] IS NULL AND [s11].[TCOMP_IN_S] IS NULL)) AND ([s].[N_RENGL_S] = [s11].[N_RENGL_S] OR ([s].[N_RENGL_S] IS NULL AND [s11].[N_RENGL_S] IS NULL)) AND ([s9].[N_PARTIDA] = [s11].[N_PARTIDA] OR ([s9].[N_PARTIDA] IS NULL AND [s11].[N_PARTIDA] IS NULL))
+    LEFT JOIN [STA13] AS [s12] ON [s0].[ID_STA13] = [s12].[ID_STA13]
+    LEFT JOIN [AXV_LIVE_GVA14FAMILIAGRUPO] AS [a1] ON [g].[ID_GVA14] = [a1].[ID_GVA14]
+    LEFT JOIN [AXV_LIVE_Cpa01FamiliaGrupo] AS [a2] ON [c].[ID_CPA01] = [a2].[ID_CPA01]
+    LEFT JOIN (
+        SELECT [s13].[ID_STA11], [s13].[ADMITE_VENTA_FRACCIONADA], [s13].[AFECTA_AF], [s13].[AFIP_EQ_S], [s13].[AFIP_EQ_V], [s13].[AFIP_UMEX_S], [s13].[AFIP_UMEX_V], [s13].[AFIP_UM_S], [s13].[AFIP_UM_V], [s13].[ALI_NO_CAT], [s13].[BASE], [s13].[CALCULA_CM], CONVERT(VARCHAR(max), [s13].[CAMPOS_ADICIONALES]) AS [CAMPOS_ADICIONALES], [s13].[CL_SIAP_CP], [s13].[CL_SIAP_GV], [s13].[COD_ACTIVI], [s13].[COD_ARTICU], [s13].[COD_BARRA], [s13].[COD_IB], [s13].[COD_IB3], [s13].[COD_II], [s13].[COD_II_CO], [s13].[COD_II_V_2], [s13].[COD_IVA], [s13].[COD_IVA_CO], [s13].[COD_NCM], [s13].[COD_PLANTI], [s13].[COD_SII_V2], [s13].[COD_STA11], [s13].[COD_S_II], [s13].[COD_S_II_C], [s13].[COD_S_IVA], [s13].[COD_S_IV_C], [s13].[COD_TIPOB], [s13].[COMISION_V], [s13].[CTA_COMPRA], [s13].[CTA_VENTAS], [s13].[CTO_COMPRA], [s13].[CTO_VENTAS], [s13].[DESCARGA_NEGATIVO_STOCK], [s13].[DESCARGA_NEGATIVO_VENTAS], [s13].[DESCRIPCIO], [s13].[DESCUENTO], [s13].[DESC_ADIC], [s13].[DESTI_ART], [s13].[DESVIO_CIERRE_PEDIDOS], [s13].[DESVIO_CONTROL_UNIDADES_STOCK], [s13].[EGRESO_MODIFICA_PARTIDA_PROPUESTA], [s13].[EQUIVALENCIA_STOCK_2], [s13].[EQUIVALE_V], [s13].[ESCALA_1], [s13].[ESCALA_2], [s13].[FACT_IMPOR], [s13].[FECHA_ALTA], [s13].[FECHA_MODI], [s13].[FILLER], [s13].[GENERACOT], [s13].[GEN_IB], [s13].[GEN_IB3], [s13].[ID_ACTIVIDAD_DGI], [s13].[ID_CLASIFICACION_SIAP_CL_SIAP_CP], [s13].[ID_CLASIFICACION_SIAP_CL_SIAP_GV], [s13].[ID_CODIGO_ITEM_TURISMO], [s13].[ID_CPA01_HABITUAL], [s13].[ID_CPA14_COD_II_CO], [s13].[ID_CPA14_COD_IVA_CO], [s13].[ID_CPA14_COD_S_II_C], [s13].[ID_CPA14_COD_S_IV_C], [s13].[ID_GVA125], [s13].[ID_GVA22], [s13].[ID_GVA41_ALI_NO_CAT], [s13].[ID_GVA41_COD_IB], [s13].[ID_GVA41_COD_IB3], [s13].[ID_GVA41_COD_II], [s13].[ID_GVA41_COD_II_V_2], [s13].[ID_GVA41_COD_IVA], [s13].[ID_GVA41_COD_SII_V2], [s13].[ID_GVA41_COD_S_II], [s13].[ID_GVA41_COD_S_IVA], [s13].[ID_MEDIDA_CONTROL_STOCK], [s13].[ID_MEDIDA_STOCK], [s13].[ID_MEDIDA_STOCK_2], [s13].[ID_MEDIDA_VENTAS], [s13].[ID_MODELO_PERCEPCION_VENTAS], [s13].[ID_STA115], [s13].[ID_STA11_BASE], [s13].[ID_STA32_ESCALA_1], [s13].[ID_STA32_ESCALA_2], [s13].[ID_STA33_VALOR1], [s13].[ID_STA33_VALOR2], [s13].[ID_TIPO_BIEN], [s13].[ID_TIPO_ITEM_AFIP], [s13].[ID_TIPO_UNIDAD_TURISMO], [s13].[ID_TYPS], [s13].[ID_UNIDAD_MEDIDA_AFIP_UMEX_S], [s13].[ID_UNIDAD_MEDIDA_AFIP_UMEX_V], [s13].[ID_UNIDAD_MEDIDA_AFIP_UM_S], [s13].[ID_UNIDAD_MEDIDA_AFIP_UM_V], [s13].[IMPUESTO_I], [s13].[IMPUEST_IC], [s13].[IMP_II_V_2], [s13].[LLEVA_DOBLE_UNIDAD_MEDIDA], [s13].[MET_DES_PA], [s13].[OBSERVACIONES], [s13].[ORD_DES_PA], [s13].[ORIGEN_PARA_CM], [s13].[PERC_NO_CA], [s13].[PERFIL], [s13].[PORC_DESVI], [s13].[PORC_SCRAP], [s13].[PORC_UTILI], [s13].[PRODUCTO_TERMINADO_COT], [s13].[PROMODESDE], [s13].[PROMOHASTA], [s13].[PROMO_MENU], [s13].[PTO_PEDIDO], [s13].[PUBLICA_WEB_PEDIDO], [s13].[RELACION_UNIDADES_STOCK], [s13].[REMITIBLE], [s13].[RENTA_EQ_S], [s13].[RENTA_EQ_V], [s13].[RENTA_PROD], [s13].[RENTA_UM_S], [s13].[RENTA_UM_V], [s13].[RET_RNI], [s13].[RET_RNI_CO], [s13].[ROW_VERSION], [s13].[SERIE_DESC_ADICIONAL_1], [s13].[SERIE_DESC_ADICIONAL_2], [s13].[SINCRONIZA_NEXO_TIENDAS], [s13].[SINCRONIZA_WEB_PEDIDO], [s13].[SINONIMO], [s13].[STOCK], [s13].[STOCK_MAXI], [s13].[STOCK_MINI], [s13].[STOCK_NEG], [s13].[TIPO_PROMO], [s13].[USA_CONTROL_UNIDADES_STOCK], [s13].[USA_CTRPRE], [s13].[USA_ESC], [s13].[USA_PARTID], [s13].[USA_SCRAP], [s13].[USA_SERIE], [s13].[VALOR1], [s13].[VALOR2]
+        FROM [STA11] AS [s13]
+        WHERE [s13].[USA_ESC] = @__Base_Key_0
+    ) AS [t] ON [s4].[ID_STA11_BASE] = [t].[ID_STA11]
+    LEFT JOIN (
+        SELECT [s14].[ID_MEDIDA_COMPRA], [s14].[ID_STA11]
+        FROM [STA_ARTICULO_UNIDAD_COMPRA] AS [s14]
+        WHERE [s14].[HABITUAL] = CAST(1 AS bit)
+    ) AS [t0] ON [s4].[ID_STA11] = [t0].[ID_STA11]
+    LEFT JOIN [MEDIDA] AS [m] ON [s4].[ID_MEDIDA_VENTAS] = [m].[ID_MEDIDA]
+    LEFT JOIN [MEDIDA] AS [m0] ON [t0].[ID_MEDIDA_COMPRA] = [m0].[ID_MEDIDA]
+    LEFT JOIN [MEDIDA] AS [m1] ON [s].[ID_MEDIDA_STOCK] = [m1].[ID_MEDIDA]
+    LEFT JOIN [MEDIDA] AS [m2] ON [s].[ID_MEDIDA_STOCK_2] = [m2].[ID_MEDIDA]
+    LEFT JOIN [SUCURSAL] AS [s15] ON CAST([s0].[SUC_ORIG] AS int) = [s15].[NRO_SUCURSAL]
+    LEFT JOIN [CPA04] AS [c0] ON ([s0].[T_COMP] = [c0].[T_COMP] OR ([s0].[T_COMP] IS NULL AND [c0].[T_COMP] IS NULL)) AND ([s0].[N_COMP] = [c0].[N_COMP] OR ([s0].[N_COMP] IS NULL AND [c0].[N_COMP] IS NULL)) AND ([s0].[COD_PRO_CL] = [c0].[COD_PROVEE] OR ([s0].[COD_PRO_CL] IS NULL AND [c0].[COD_PROVEE] IS NULL))
+    LEFT JOIN [CTA115] AS [c1] ON ([s0].[TCOMP_ORIG] = [c1].[T_COMP] OR ([s0].[TCOMP_ORIG] IS NULL AND [c1].[T_COMP] IS NULL)) AND ([s0].[NCOMP_ORIG] = [c1].[N_COMP] OR ([s0].[NCOMP_ORIG] IS NULL AND [c1].[N_COMP] IS NULL)) AND ([s0].[SUC_ORIG] = [c1].[NRO_SUCURS] OR ([s0].[SUC_ORIG] IS NULL AND [c1].[NRO_SUCURS] IS NULL))
+    LEFT JOIN [GVA12] AS [g1] ON [s0].[T_COMP] = [g1].[T_COMP] AND ([s0].[N_COMP] = [g1].[N_COMP] OR ([s0].[N_COMP] IS NULL AND [g1].[N_COMP] IS NULL)) AND [s0].[COD_PRO_CL] = [g1].[COD_CLIENT]
+    LEFT JOIN [MODULO] AS [m3] ON CASE
+        WHEN [s0].[TCOMP_IN_S] IN (@__Factura_Key_1, @__FacturaRemito_Key_2, @__NotaDeCredito_Key_3, @__NotaDeDebito_Key_4, @__Recibo_Key_5, @__Remito_Key_6, @__DevolucionDeRemito_Key_7) THEN @__Ventas_Key_8
+        WHEN [s0].[TCOMP_IN_S] IN (@__Factura_Key_9, @__FacturaRemito_Key_10, @__NotaDeCredito_Key_11, @__NotaDeDebito_Key_12, @__OrdenPago_Key_13, @__Remito_Key_14, @__DevolucionDeRemito_Key_15) THEN @__Compras_Key_16
+        WHEN [s0].[TCOMP_IN_S] IN (@__Ajuste_Key_17, @__Armado_Key_18, @__Transferencia_Key_19, @__Salida_Key_20, @__Entrada_Key_21) THEN @__Stock_Key_22
+        WHEN [s0].[TCOMP_IN_S] IN (@__ME_Key_23, @__CR_Key_24) THEN @__CajaResto_Key_25
+        ELSE NULL
+    END = [m3].[COD_MODULO]
+    WHERE ([s].[TIPO_MOV] <> @__NoGenereMovimiento_Key_26 OR [s].[TIPO_MOV] IS NULL) AND ([s].[COD_ARTICU] <> N'' OR [s].[COD_ARTICU] IS NULL) AND [s0].[FECHA_MOV] IS NOT NULL AND CONVERT(date, [s0].[FECHA_MOV]) >= @__p_27 AND CONVERT(date, [s0].[FECHA_MOV]) <= @__p_28 AND UPPER(CASE
+        WHEN [m3].[COD_MODULO] = N'GV' THEN N'Ventas'
+        WHEN [m3].[COD_MODULO] = N'ST' THEN N'Stock 1'
+        WHEN [m3].[COD_MODULO] = N'CP' THEN N'Compras'
+        ELSE N''
+    END) = @__ToUpper_29
+) AS [t1]
+GROUP BY [t1].[ID_STA140], [t1].[ID_GVA12], [t1].[ID_CPA04], [t1].[ID_STA110], [t1].[FECHA_MOV0], [t1].[T_COMP], [t1].[N_COMP], [t1].[TCOMP_IN_S0], [t1].[COD_ARTICU], [t1].[DESCRIPCIO], [t1].[TCOMP_IN_S0], [t1].[NCOMP_IN_S0], [t1].[COD_PRO_CL], [t1].[CLIENTEPROVEEDOR], [t1].[FECHA_INGRESO], [t1].[SIGLA_MEDIDA1], [t1].[PRECIO], [t1].[USUARIO], [t1].[TCOMP_IN_C], [t1].[NRO_INTERNO]
+END;
+GO

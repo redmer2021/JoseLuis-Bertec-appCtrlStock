@@ -73,6 +73,52 @@
         py-1;
 }
 
+.grillas-celdas-3-1{
+    @apply 
+        flex
+        bg-green-500
+        rounded-md 
+        text-black
+        font-normal
+        text-[12px] 
+        px-2 
+        whitespace-nowrap 
+        overflow-hidden 
+        text-ellipsis
+        py-1;
+}
+.grillas-celdas-3-2{
+    @apply 
+        flex
+        bg-yellow-500
+        rounded-md 
+        text-black
+        font-normal
+        text-[12px] 
+        px-2 
+        whitespace-nowrap 
+        overflow-hidden 
+        text-ellipsis
+        py-1;
+}
+.grillas-celdas-3-3{
+    @apply 
+        flex
+        bg-red-500
+        rounded-md 
+        text-black
+        font-normal
+        text-[12px] 
+        px-2 
+        whitespace-nowrap 
+        overflow-hidden 
+        text-ellipsis
+        py-1;
+}
+
+
+
+
 .ventanaModal {
     @apply 
         fixed 

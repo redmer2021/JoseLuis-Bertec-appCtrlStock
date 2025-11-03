@@ -16,34 +16,25 @@
     <span class="font-bold md:text-[1.5rem]">REVISIÓN DE DEPÓSITOS</span>
     
     <div class="w-full my-[1rem] mr-4">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+        <div class="grid grid-cols-1 md:grid-cols-[1fr_1fr_2fr_2fr_1fr] gap-3 w-[70%]">
             <div class="flex bg-gray-300 rounded-md">
                 <input wire:model="txtBuscaNroOrdenCompra" type="text" class="p-2 w-full focus:outline-none focus:ring-0" placeholder="Nro. Orden de Compra">
-                <button class="p-2 cursor-pointer" wire:click="Buscar4()">
-                    <img src="{{ asset('imgs/lupa.png') }}" alt="lupa" class="h-8 w-8">
-                </button>
             </div>
 
             <div class="flex bg-gray-300 rounded-md">
                 <input wire:model="txtBuscaNroVentas" type="text" class="p-2 w-full focus:outline-none focus:ring-0" placeholder="Nro. Pedido">
-                <button class="p-2 cursor-pointer" wire:click="Buscar1()">
-                    <img src="{{ asset('imgs/lupa.png') }}" alt="lupa" class="h-8 w-8">
-                </button>
             </div>
             <div class="flex bg-gray-300 rounded-md">
                 <input wire:model="txtBuscaDescArtic" type="text" class="p-2 w-full focus:outline-none focus:ring-0" placeholder="Descripción artículo">
-                <button class="p-2 cursor-pointer" wire:click="Buscar2()">
-                    <img src="{{ asset('imgs/lupa.png') }}" alt="lupa" class="h-8 w-8">
-                </button>
             </div>
 
             <div class="flex bg-gray-300 rounded-md">
                 <input wire:model="txtBuscaRazSocial" type="text" class="p-2 w-full focus:outline-none focus:ring-0" placeholder="Cliente">
-                <button class="p-2 cursor-pointer" wire:click="Buscar3()">
-                    <img src="{{ asset('imgs/lupa.png') }}" alt="lupa" class="h-8 w-8">
-                </button>
             </div>
-
+            
+            <button class="p-2 cursor-pointer" wire:click="Buscar()">
+                <img src="{{ asset('imgs/lupa.png') }}" alt="lupa" class="h-8 w-8">
+            </button>
 
         </div>
     </div>
@@ -71,7 +62,7 @@
             @foreach ($listaRevDepositos as $it)
                 <div class="grillas-celdas-2 flex justify-center items-center">
                     @if (in_array(auth()->user()->name, ['CYP', 'DEP']))
-                        <img wire:click="Editar('{{ $it['nro_pedido'] }}', '{{ $it['cod_artic'] }}')" src="{{ asset('imgs/editar.png') }}" alt="Ventas" class="cursor-pointer hover:scale-105 w-[1rem]"/>
+                        <img wire:click="Editar('{{ $it['nro_pedido'] }}', '{{ $it['cod_artic'] }}', '{{ $it['descrip'] }}')" src="{{ asset('imgs/editar.png') }}" alt="Ventas" class="cursor-pointer hover:scale-105 w-[1rem]"/>
                     @else
                         <img src="{{ asset('imgs/editar.png') }}" alt="Ventas" class="w-[1rem]"/>
                     @endif
@@ -111,29 +102,29 @@
     >
         <div class="ventanaInterna_1 p-[8rem]">
 
-            <div class="grid grid-cols-12 mb-[2rem] bg-gray-300 rounded-md pr-3">
+            <div class="grid grid-cols-[1fr_1fr_2fr] mb-[2rem] bg-gray-300 rounded-md pr-3">
 
-                <div class="pl-2 flex items-center row-span-2 col-span-4">
+                <div class="pl-2 row-span-2 flex items-center">
                     <span>Asignar datos a:</span>
                 </div>
-                <div class="pt-2 text-xs flex justify-end col-span-4">
+                <div class="pt-2 text-xs flex justify-end">
                     <span>Comprobante</span>
                 </div>
-                <div class="pt-2 text-xs flex justify-end col-span-4">
+                <div class="pt-2 text-xs flex justify-end">
                     <span>Cód-Artículo</span>
                 </div>
 
-                <div class="py-2 col-span-4 flex justify-end">
+                <div class="py-2 flex justify-end">
                     <label class="cursor-pointer mr-2" for="op1">{{ $varComprobante }}</label>
                     <input class="cursor-pointer" wire:model="asignardtos_a" value="1" id="op1" type="radio" name="asignardtos_a">
                 </div>
 
-                <div class="py-2 col-span-4 flex justify-end">
-                    <label class="cursor-pointer mr-2" for="op2">{{ $varCodArticulo }}</label>
+                <div class="py-2 flex justify-end">
+                    <label class="cursor-pointer mr-2" for="op2">{{ $varDescArticulo }}</label>
                     <input class="cursor-pointer" wire:model="asignardtos_a" value="2" id="op2" type="radio" name="asignardtos_a">
                 </div>
                 @error('asignardtos_a')
-                    <div class="col-span-12 flex justify-center mb-2">
+                    <div class="col-span-3 flex justify-center mb-2">
                         <span class="block text-red-600 mt-1">{{$message}}</span>
                     </div>
                 @enderror

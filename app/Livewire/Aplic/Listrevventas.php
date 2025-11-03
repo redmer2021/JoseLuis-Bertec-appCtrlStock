@@ -21,10 +21,14 @@ class Listrevventas extends Component
 
     public $ordenarComo1 = 'asc';
     public $ordenarComo2 = 'asc';
+    public $ordenarComo3 = 'asc';
+    public $ordenarComo4 = 'asc';
+    public $ordenarComo5 = 'asc';
 
 
     public $varComprobante = '';
     public $varCodArticulo = '';
+    public $varDescArticulo = '';
     public $codEstado = 0;
     public $asignardtos_a = 0;
     public $codColor = 2;
@@ -49,34 +53,34 @@ class Listrevventas extends Component
         $this->selectDatos(2);
     }
 
-    public function Buscar1(){
-        $this->txtBuscaNroVentas = '';
-        $this->txtBuscaDescArtic = '';
-        $this->txtBuscaRazSocial = '';
-        $this->selectDatos();
+    public function Reordenar3(){
+        if ($this->ordenarComo3 == 'desc'){
+            $this->ordenarComo3 = 'asc';
+        } else {
+            $this->ordenarComo3 = 'desc';
+        }
+        $this->selectDatos(3);
+    }
+    public function Reordenar4(){
+        if ($this->ordenarComo4 == 'desc'){
+            $this->ordenarComo4 = 'asc';
+        } else {
+            $this->ordenarComo4 = 'desc';
+        }
+        $this->selectDatos(4);
+    }
+    public function Reordenar5(){
+        if ($this->ordenarComo5 == 'desc'){
+            $this->ordenarComo5 = 'asc';
+        } else {
+            $this->ordenarComo5 = 'desc';
+        }
+        $this->selectDatos(5);
     }
 
-    public function Buscar2(){        
-        $this->txtBuscaOrdenComp = '';
-        $this->txtBuscaDescArtic = '';        
-        $this->txtBuscaRazSocial = '';
+    public function Buscar(){
         $this->selectDatos();
     }
-
-    public function Buscar3(){
-        $this->txtBuscaOrdenComp = '';
-        $this->txtBuscaNroVentas = '';
-        $this->txtBuscaRazSocial = '';
-        $this->selectDatos();
-    }
-
-    public function Buscar4(){
-        $this->txtBuscaOrdenComp = '';
-        $this->txtBuscaNroVentas = '';
-        $this->txtBuscaDescArtic = '';
-        $this->selectDatos();
-    }
-
 
     protected function LimpiarCampos(){
         $this->reset([
@@ -89,12 +93,13 @@ class Listrevventas extends Component
         ]);
     }
 
-    public function Editar($param1, $param2){
+    public function Editar($param1, $param2, $param3){
         $this->verForm = true;
         $this->LimpiarCampos();
         $this->resetErrorBag();
         $this->varComprobante = $param1;
         $this->varCodArticulo = $param2;
+        $this->varDescArticulo = $param3;
 
         // Buscar datos de auditoría en bertec_01_control_ventas
         $dtosAudit = DB::table('bertec_01_control_ventas')
@@ -222,33 +227,23 @@ class Listrevventas extends Component
         $this->txtBuscaDescArtic  = trim($this->txtBuscaDescArtic);
         $this->txtBuscaRazSocial    = trim($this->txtBuscaRazSocial);
 
-        // Traer compras 
-        if ($this->txtBuscaOrdenComp!=''){
-            $list_ventas = DB::table('bertec_01_pend_entrega')
-            ->where('nro_o_compra', 'like', '%' . $this->txtBuscaOrdenComp . '%')
+        // Construir query dinámica
+        $list_ventas = DB::table('vta_bertec_01_pend_entrega')
+            ->when($this->txtBuscaOrdenComp != '', function ($query) {
+                $query->where('nro_o_compra', 'like', '%' . $this->txtBuscaOrdenComp . '%');
+            })
+            ->when($this->txtBuscaNroVentas != '', function ($query) {
+                $query->where('nro_pedido', 'like', '%' . $this->txtBuscaNroVentas . '%');
+            })
+            ->when($this->txtBuscaDescArtic != '', function ($query) {
+                $query->where('descrip', 'like', '%' . $this->txtBuscaDescArtic . '%');
+            })
+            ->when($this->txtBuscaRazSocial != '', function ($query) {
+                $query->where('raz_social', 'like', '%' . $this->txtBuscaRazSocial . '%');
+            })
             ->orderBy('nro_pedido')
+            // ->limit(50)
             ->get();
-        } else if ($this->txtBuscaNroVentas!=''){
-            $list_ventas = DB::table('bertec_01_pend_entrega')
-            ->where('nro_pedido', 'like', '%' . $this->txtBuscaNroVentas . '%')
-            ->orderBy('nro_pedido')
-            ->get();
-        } else if ($this->txtBuscaDescArtic!=''){
-            $list_ventas = DB::table('bertec_01_pend_entrega')
-            ->where('descrip', 'like', '%' . $this->txtBuscaDescArtic . '%')
-            ->orderBy('nro_pedido')
-            ->get();
-        } else if ($this->txtBuscaRazSocial!=''){
-            $list_ventas = DB::table('bertec_01_pend_entrega')
-            ->where('raz_social', 'like', '%' . $this->txtBuscaRazSocial . '%')
-            ->orderBy('nro_pedido')
-            ->get();
-        } else {
-            $list_ventas = DB::table('bertec_01_pend_entrega')
-            ->orderBy('nro_pedido')
-            ->limit(100)
-            ->get();
-        }
 
         foreach ($list_ventas as $ventas) {
             // Buscar stock del artículo
@@ -283,10 +278,12 @@ class Listrevventas extends Component
                 $compras_comentrarios = $notasCompras->comentarios1;
             }
 
-            $impoDolariz = ($ventas->cotiza && $ventas->cotiza != 0)
-            ? $ventas->importe / $ventas->cotiza
-            : 0;
-
+            if (!empty($ventas->cotiza) && $ventas->cotiza != 0 && !empty($ventas->pend_factu) && $ventas->pend_factu != 0) {        
+                $impoDolariz = ($ventas->importe / $ventas->pend_factu) / $ventas->cotiza;
+            } else {
+                $impoDolariz = 0;
+            }
+        
             // Buscar datos de auditoría en bertec_01_control_ventas
             $dtosAudit = DB::table('bertec_01_control_ventas')
                 ->select('codEstado','comentarios','fecModifEstado','user', 'codColor')
@@ -324,7 +321,22 @@ class Listrevventas extends Component
                 ->select('precio')
                 ->where('cod_articulo', $ventas->cod_artic)
                 ->first();
-            
+
+            //Calcular diferencia porcentual
+            $difPorcentual = 0;
+            if ($impoDolariz > 0 && $impoDolariz < ($precLista->precio ?? 0)) {
+                $diferencia = $precLista->precio - $impoDolariz;
+                $difPorcentual = ($diferencia / $precLista->precio) * 100;
+            }
+            $colorCelda = 0;
+            if ($difPorcentual>=0.1 and $difPorcentual<=20){
+                $colorCelda = 1;
+            } else if ($difPorcentual > 20 and $difPorcentual<=25){
+                $colorCelda = 2;
+            } else if ($difPorcentual>25){
+                $colorCelda = 3;
+            }
+
             $listadoFinal[] = [
                 'nro_pedido' => $ventas->nro_pedido,
                 'cod_artic' => $ventas->cod_artic,
@@ -355,12 +367,17 @@ class Listrevventas extends Component
                 'compras_feccompra' => $compras_feccompra,
                 'compras_fecmodif' => $compras_fecmodif,
                 'compras_comentrarios' => $compras_comentrarios,
-                'precLista' => $precLista?->precio ?? 0
+                'precLista' => $precLista?->precio ?? 0,
+                'difPorcentual' => $difPorcentual,
+                'colorCelda' => $colorCelda,
             ];
         }
 
         if ($columOrden == 1){
             $this->ordenarComo2 = 'asc';
+            $this->ordenarComo3 = 'asc';
+            $this->ordenarComo4 = 'asc';
+            $this->ordenarComo5 = 'asc';
             $orden = ($this->ordenarComo1 == 'desc') ? 'desc' : 'asc';
             usort($listadoFinal, function($a, $b) use ($orden) {
                 $estA = $a['codEstado'];
@@ -373,6 +390,9 @@ class Listrevventas extends Component
             });
         } else if ($columOrden == 2){
             $this->ordenarComo1 = 'asc';
+            $this->ordenarComo3 = 'asc';
+            $this->ordenarComo4 = 'asc';
+            $this->ordenarComo5 = 'asc';
             $orden = ($this->ordenarComo2 == 'desc') ? 'desc' : 'asc';
             usort($listadoFinal, function($a, $b) use ($orden) {
                 $fechaA = Carbon::createFromFormat('d/m/Y H:i:s', $a['plan_entrega']);
@@ -383,6 +403,51 @@ class Listrevventas extends Component
                     return $fechaB <=> $fechaA; // Descendente
                 }
             });
+        } else if ($columOrden == 3){
+            $this->ordenarComo1 = 'asc';
+            $this->ordenarComo2 = 'asc';
+            $this->ordenarComo4 = 'asc';
+            $this->ordenarComo5 = 'asc';
+            $orden = ($this->ordenarComo3 == 'desc') ? 'desc' : 'asc';
+            usort($listadoFinal, function($a, $b) use ($orden) {
+                $estA = $a['codColor'];
+                $estB = $b['codColor'];
+                if ($orden === 'asc') {
+                    return $estA <=> $estB; // Ascendente
+                } else {
+                    return $estB <=> $estA; // Descendente
+                }
+            });            
+        } else if ($columOrden == 4){
+            $this->ordenarComo1 = 'asc';
+            $this->ordenarComo2 = 'asc';
+            $this->ordenarComo3 = 'asc';
+            $this->ordenarComo5 = 'asc';
+            $orden = ($this->ordenarComo4 == 'desc') ? 'desc' : 'asc';
+            usort($listadoFinal, function($a, $b) use ($orden) {
+                $estA = $a['faltante'];
+                $estB = $b['faltante'];
+                if ($orden === 'asc') {
+                    return $estA <=> $estB; // Ascendente
+                } else {
+                    return $estB <=> $estA; // Descendente
+                }
+            });
+        } else if ($columOrden == 5){
+            $this->ordenarComo1 = 'asc';
+            $this->ordenarComo2 = 'asc';
+            $this->ordenarComo3 = 'asc';
+            $this->ordenarComo4 = 'asc';
+            $orden = ($this->ordenarComo5 == 'desc') ? 'desc' : 'asc';
+            usort($listadoFinal, function($a, $b) use ($orden) {
+                $estA = $a['difDiasPlanEntrega'];
+                $estB = $b['difDiasPlanEntrega'];
+                if ($orden === 'asc') {
+                    return $estA <=> $estB; // Ascendente
+                } else {
+                    return $estB <=> $estA; // Descendente
+                }
+            });            
         }
 
         $this->listaRevVentas = $listadoFinal;
