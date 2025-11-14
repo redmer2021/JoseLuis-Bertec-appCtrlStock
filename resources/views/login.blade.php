@@ -2,6 +2,10 @@
 
 
 @section('contenidosPrincipales')
+    @php
+        use Carbon\Carbon;
+        $fechaAyer = Carbon::yesterday()->format('Y-m-d');
+    @endphp
 
     <section class="w-[95%] md:w-[20rem] mt-[3rem] bg-gray-300 mx-auto rounded-md p-4">
         <h1 class="text-center font-bold leading-tight tracking-tight text-gray-900 text-xl md:text-2xl pt-[1rem] mb-[2rem]">
@@ -34,6 +38,7 @@
                 @else
                     <label for="email" class="block mb-2 text-sm font-medium text-gray-900 ">Email</label>
                     <input value="{{ old('email') }}" type="email" autofocus name="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="name@company.com">
+                    {{-- <input value="compras@bertec.com.ar" type="email" autofocus name="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="name@company.com"> --}}
                 @endif
             </div>
             <div>
@@ -44,11 +49,23 @@
                 @else
                     <label for="password" class="block mb-2 text-sm font-medium text-gray-900 ">Contraseña</label>
                     <input type="password" name="password" id="password" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 ">
-                </div>
+                    {{-- <input value="compras_2025" type="password" name="password" id="password" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 "> --}}
                 @endif
+            </div>
+            <!-- Bloque STOCK F.IN -->
+            <div class="inline-flex items-center bg-gray-50 rounded-md px-2 py-2 whitespace-nowrap w-full">
+                <label for="txtFecIngresoStock" class="mr-2">F INGR A STOCK</label>
+                <input 
+                    name="txtFecIngresoStock" 
+                    id="txtFecIngresoStock" 
+                    type="date" 
+                    class="focus:outline-none focus:ring-0"
+                    value="{{ $fechaAyer }}"
+                >
+            </div>
 
             <div class="grid grid-cols-1">
-                <button type="submit" class="btn-uno">Iniciar sesión</button>
+                <button type="submit" class="btn-uno cursor-pointer">Iniciar sesión</button>
             </div>
 
         </form>

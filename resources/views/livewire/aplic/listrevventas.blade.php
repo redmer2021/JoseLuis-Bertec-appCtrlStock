@@ -12,40 +12,124 @@
             <span>Recuperando datos...</span>
         </div>
     </div>
+    <!--                                           1    2    3     4     5     6    7    8    9    10   11   12   13   14    15    16   17    18    19    20    21    22    23    24    25    26    27   28    29 -->
+    <div class="sticky top-0 grid gap-1 grid-cols-[50px_80px_120px_150px_250px_60px_60px_60px_60px_60px_60px_80px_80px_110px_110px_80px_110px_110px_110px_250px_110px_110px_250px_110px_110px_100px_80px_250px_130px]">
+        <div class="grillas-celdas-1-1">edit</div> <!-- 1 -->
+        <div class="grillas-celdas-1-1">APROB</div> <!-- 2 -->
+        <div class="grillas-celdas-1-1">NRO.PEDIDO</div> <!-- 3 -->
+        <div class="grillas-celdas-1-1">ARTICULO</div> <!-- 4 -->
+        <div class="grillas-celdas-1-1">DESCRIPCION</div> <!-- 5 -->
+        <div class="grillas-celdas-1-1">ITEM</div> <!-- 6 -->
+        <div class="grillas-celdas-1-1">PEDIDA</div> <!-- 7 -->
+        <div class="grillas-celdas-1-1">PEND</div> <!-- 8 -->
+        <div class="grillas-celdas-1-1">STOCK</div> <!-- 9 -->
+        <div class="grillas-celdas-1-1">COMPR.</div> <!-- 10 -->
+        <div class="grillas-celdas-1-1">A RECIB</div> <!-- 11 -->
+        <div class="grillas-celdas-1-1">FALT.</div> <!-- 12 -->
+        <div class="grillas-celdas-1-1">INGR.</div> <!-- 13 -->
+        <div class="grillas-celdas-1-1">PRECIO</div> <!-- 14 -->
+        <div class="grillas-celdas-1-1">PREC-LSTA</div> <!-- 15 -->
+        <div class="grillas-celdas-1-1">DIF-%</div> <!-- 16 -->
+        <div class="grillas-celdas-1-1">EST</div> <!-- 17 -->
+        <div class="grillas-celdas-1-1">F. MOD</div> <!-- 18 -->
+        <div class="grillas-celdas-1-1">USER</div> <!-- 19 -->
+        <div class="grillas-celdas-1-1">COMENTARIOS</div> <!-- 20 -->
+        <div class="grillas-celdas-1-1">F. ENTR MOD</div> <!-- 21 -->
+        <div class="grillas-celdas-1-1">F. MODIFIC</div> <!-- 22 --> 
+        <div class="grillas-celdas-1-1">COMENTARIOS COMPRAS</div> <!-- 23 -->
+        <div class="grillas-celdas-1-1">F.PEDIDO</div> <!-- 24 -->
+        <div class="grillas-celdas-1-1">PL ENT.</div> <!-- 25 -->
+        <div class="grillas-celdas-1-1">DIAS V.</div> <!-- 26 -->
+        <div class="grillas-celdas-1-1">VEND</div> <!-- 27 -->
+        <div class="grillas-celdas-1-1">RAZóN SOCIAL</div> <!-- 28 -->
+        <div class="grillas-celdas-1-1">NRO O/COMPRA</div> <!-- 29 -->
+    </div>
 
-    <span class="font-bold md:text-[1.5rem]">REVISIÓN DE VENTAS</span>
+    <span class="font-bold md:text-[1.5rem] block mt-[1rem] ml-[1rem]">VENTAS</span>
 
-    <div class="w-full my-[1rem]">
-        <div class="grid grid-cols-1 md:grid-cols-[1fr_1fr_2fr_2fr_1fr] gap-3 w-[70%]">
+    <div class="w-full my-[1rem] mr-4 flex justify-between">
+        <div class="inline-grid grid-cols-[1fr_1fr_1fr_1fr_1fr] gap-3 items-center ml-[1rem]">
+            <!-- Nro. Orden de Compra -->
             <div class="flex bg-gray-300 rounded-md">
-                <input wire:model="txtBuscaOrdenComp" type="text" class="p-2 w-full focus:outline-none focus:ring-0" placeholder="Nro. Orden de compra">
-            </div>
-            <div class="flex bg-gray-300 rounded-md">
-                <input wire:model="txtBuscaNroVentas" type="text" class="p-2 w-full focus:outline-none focus:ring-0" placeholder="Nro. Pedido">
-            </div>
-            <div class="flex bg-gray-300 rounded-md">
-                <input wire:model="txtBuscaDescArtic" type="text" class="p-2 w-full focus:outline-none focus:ring-0" placeholder="Descripción artículo">
+                <input wire:model="txtBuscaOrdenComp"
+                    type="text"
+                    class="p-2 w-full focus:outline-none focus:ring-0"
+                    placeholder="Nro. Orden de Compra">
             </div>
 
+            <!-- Nro. Pedido -->
             <div class="flex bg-gray-300 rounded-md">
-                <input wire:model="txtBuscaRazSocial" type="text" class="p-2 w-full focus:outline-none focus:ring-0" placeholder="Cliente">
+                <input wire:model="txtBuscaNroVentas"
+                    type="text"
+                    class="p-2 w-full focus:outline-none focus:ring-0"
+                    placeholder="Nro. Pedido">
             </div>
 
-            <button class="p-2 cursor-pointer" wire:click="Buscar()">
-                <img src="{{ asset('imgs/lupa.png') }}" alt="lupa" class="h-8 w-8">
+            <!-- Descripción artículo -->
+            <div class="flex bg-gray-300 rounded-md">
+                <input wire:model="txtBuscaDescArtic"
+                    type="text"
+                    class="p-2 w-full focus:outline-none focus:ring-0"
+                    placeholder="Descripción artículo">
+            </div>
+
+            <!-- Cliente -->
+            <div class="flex bg-gray-300 rounded-md">
+                <input wire:model="txtBuscaRazSocial"
+                    type="text"
+                    class="p-2 w-full focus:outline-none focus:ring-0"
+                    placeholder="Cliente">                    
+                </div>
+
+            <!-- Botón lupa (alineado a la izquierda del bloque STOCK F.IN) -->
+            <button type="button" class="p-2  flex justify-start items-center rounded-md">
+                <img wire:click="Buscar()" src="{{ asset('imgs/lupa.png') }}" alt="lupa" class="h-7 w-7 cursor-pointer">
             </button>
 
+            <!-- Bloque STOCK F.IN -->
+            {{-- <div class="inline-flex items-center bg-gray-300 rounded-md px-2 py-1 whitespace-nowrap">
+                <label for="txtFecIngresoStock" class="mr-2">STOCK F.IN:</label>
+                <input id="txtFecIngresoStock" type="date" wire:model="txtFecIngresoStock" class="focus:outline-none focus:ring-0">
+                <button type="button" class="p-1 ml-2 cursor-pointer" wire:click="Buscar()">
+                    <img src="{{ asset('imgs/lupa.png') }}" alt="lupa" class="h-7 w-7">
+                </button>
+            </div> --}}
         </div>
+
+        <button 
+            class="font-bold 
+                    py-1 
+                    md:px-4 
+                    text-xs 
+                    text-center 
+                    md:text-lg 
+                    hover:cursor-pointer 
+                    border-2 
+                    border-transparent 
+                    hover:border-[#162556]
+                    bg-gray-300
+                    rounded-md 
+                    flex 
+                    items-center 
+                    mr-[1rem]
+                    justify-center"
+            wire:click="ExportExcel()">
+            Exportar a Excel
+        </button>
+
     </div>
 
     <div>
+        <!--                              1    2    3     4     5     6    7    8    9    10   11   12   13   14    15    16   17    18    19    20    21    22    23    24    25    26    27   28    29 -->
         <div class="grid gap-1 grid-cols-[50px_80px_120px_150px_250px_60px_60px_60px_60px_60px_60px_80px_80px_110px_110px_80px_110px_110px_110px_250px_110px_110px_250px_110px_110px_100px_80px_250px_130px]">
             <div class="grillas-celdas-1">edit</div>
-            <div wire:click="Reordenar3()" class="cursor-pointer grillas-celdas-1 !justify-between">
-                <span  class="">
+            <div wire:click="Reordenar(1)" class="cursor-pointer grillas-celdas-1 !justify-between">
+                <span>
                     APROB
                 </span>
-                @if ($ordenarComo3 == 'desc')
+                @if ($ordenarComo1 == 'sin')
+                    <img src="{{ asset('imgs/sin-ordenar.png') }}" alt="Orden" class="h-5 w-5">
+                @elseif ($ordenarComo1 == 'asc')
                     <img src="{{ asset('imgs/orden-ascendente.png') }}" alt="Orden" class="h-5 w-5">
                 @else
                     <img src="{{ asset('imgs/orden-descendiente.png') }}" alt="Orden" class="h-5 w-5">
@@ -60,29 +144,46 @@
             <div class="grillas-celdas-1">STOCK</div>
             <div class="grillas-celdas-1">COMPR.</div>
             <div class="grillas-celdas-1">A RECIB</div>
-            <div wire:click="Reordenar4()" class="cursor-pointer grillas-celdas-1 !justify-between">
-                <span  class="">
+            <div wire:click="Reordenar(2)" class="cursor-pointer grillas-celdas-1 !justify-between">
+                <span>
                     FALT.
                 </span>
-                @if ($ordenarComo4 == 'desc')
-                    <img src="{{ asset('imgs/orden-ascendente.png') }}" alt="Orden" class="h-5 w-5">
-                @else
+                @if ($ordenarComo2 == 'sin')
+                    <img src="{{ asset('imgs/sin-ordenar.png') }}" alt="Orden" class="h-5 w-5">
+                @elseif ($ordenarComo2 == 'asc')
                     <img src="{{ asset('imgs/orden-descendiente.png') }}" alt="Orden" class="h-5 w-5">
+                @else
+                    <img src="{{ asset('imgs/orden-ascendente.png') }}" alt="Orden" class="h-5 w-5">
                 @endif
             </div>
-            <div class="grillas-celdas-1">INGR.</div>
+
+            <div wire:click="Reordenar(3)" class="grillas-celdas-1 !justify-between">
+                <span class="cursor-pointer">
+                    INGR
+                </span>
+                @if ($ordenarComo3 == 'sin')
+                    <img src="{{ asset('imgs/sin-ordenar.png') }}" alt="Orden" class="h-5 w-5">
+                @elseif ($ordenarComo3 == 'asc')
+                    <img src="{{ asset('imgs/orden-descendiente.png') }}" alt="Orden" class="h-5 w-5">
+                @else
+                    <img src="{{ asset('imgs/orden-ascendente.png') }}" alt="Orden" class="h-5 w-5">
+                @endif
+            </div>
+
             <div class="grillas-celdas-1">PRECIO</div>
             <div class="grillas-celdas-1">PREC-LSTA</div>
             <div class="grillas-celdas-1">DIF-%</div>
 
-            <div wire:click="Reordenar1()" class="cursor-pointer grillas-celdas-1 !justify-between">
-                <span  class="">
+            <div wire:click="Reordenar(4)" class="cursor-pointer grillas-celdas-1 !justify-between">
+                <span>
                     EST
                 </span>
-                @if ($ordenarComo1 == 'desc')
-                    <img src="{{ asset('imgs/orden-ascendente.png') }}" alt="Orden" class="h-5 w-5">
-                @else
+                @if ($ordenarComo4 == 'sin')
+                    <img src="{{ asset('imgs/sin-ordenar.png') }}" alt="Orden" class="h-5 w-5">
+                @elseif ($ordenarComo4 == 'asc')
                     <img src="{{ asset('imgs/orden-descendiente.png') }}" alt="Orden" class="h-5 w-5">
+                @else
+                    <img src="{{ asset('imgs/orden-ascendente.png') }}" alt="Orden" class="h-5 w-5">
                 @endif
             </div>
             <div class="grillas-celdas-1">F. MOD</div>
@@ -93,25 +194,29 @@
             <div class="grillas-celdas-1">COMENTARIOS COMPRAS</div>
             <div class="grillas-celdas-1">F.PEDIDO</div>
 
-            <div wire:click="Reordenar2()" class="cursor-pointer grillas-celdas-1 !justify-between">
+            <div wire:click="Reordenar(5)" class="cursor-pointer grillas-celdas-1 !justify-between">
                 <span>
                     PL ENT.
                 </span>
-                @if ($ordenarComo2 == 'desc')
-                    <img src="{{ asset('imgs/orden-ascendente.png') }}" alt="Orden" class="h-5 w-5">
-                @else
+                @if ($ordenarComo5 == 'sin')
+                    <img src="{{ asset('imgs/sin-ordenar.png') }}" alt="Orden" class="h-5 w-5">
+                @elseif ($ordenarComo5 == 'asc')
                     <img src="{{ asset('imgs/orden-descendiente.png') }}" alt="Orden" class="h-5 w-5">
+                @else
+                    <img src="{{ asset('imgs/orden-ascendente.png') }}" alt="Orden" class="h-5 w-5">
                 @endif
             </div>
 
-            <div wire:click="Reordenar5()" class="cursor-pointer grillas-celdas-1 !justify-between">
+            <div wire:click="Reordenar(6)" class="cursor-pointer grillas-celdas-1 !justify-between">
                 <span>
                     DIAS V.
                 </span>
-                @if ($ordenarComo5 == 'desc')
-                    <img src="{{ asset('imgs/orden-ascendente.png') }}" alt="Orden" class="h-5 w-5">
-                @else
+                @if ($ordenarComo6 == 'sin')
+                    <img src="{{ asset('imgs/sin-ordenar.png') }}" alt="Orden" class="h-5 w-5">
+                @elseif ($ordenarComo6 == 'asc')
                     <img src="{{ asset('imgs/orden-descendiente.png') }}" alt="Orden" class="h-5 w-5">
+                @else
+                    <img src="{{ asset('imgs/orden-ascendente.png') }}" alt="Orden" class="h-5 w-5">
                 @endif
             </div>
 
@@ -122,54 +227,70 @@
             @foreach ($listaRevVentas as $it)
                 <div class="grillas-celdas-2 flex justify-center items-center">
                     @if (in_array(auth()->user()->name, ['CYP', 'VTAS']))
-                        <img wire:click="Editar('{{ $it['nro_pedido'] }}', '{{ $it['cod_artic'] }}', '{{ $it['descrip'] }}')" src="{{ asset('imgs/editar.png') }}" alt="Ventas" class="cursor-pointer hover:scale-105 w-[1rem]"/>
+                        <img wire:click="Editar('{{ $it->nro_pedido }}', '{{ $it->cod_artic }}', '{{ $it->descrip }}')" src="{{ asset('imgs/editar.png') }}" alt="Ventas" class="cursor-pointer hover:scale-105 w-[1rem]"/>
                     @else
                         <img src="{{ asset('imgs/editar.png') }}" alt="Ventas" class="w-[1rem]"/>
                     @endif
                 </div>
                 <div class="grillas-celdas-2" 
-                    style="background-color: <?= ($it['codColor'] == 1) ? 'green' : 'gray'; ?>;">                   
+                    style="background-color: <?= ($it->codColor == 1) ? 'green' : 'gray'; ?>;">
                 </div>
-                <div class="grillas-celdas-2">{{ $it['nro_pedido'] }}</div>
-                <div class="grillas-celdas-2">{{ $it['cod_artic'] }}</div>
-                <div class="grillas-celdas-2">{{ $it['descrip'] }}</div>
-                <div class="grillas-celdas-2 justify-end ">{{ $it['renglon'] }}</div>
-                <div class="grillas-celdas-2 justify-end ">{{ number_format($it['cant_pedida'], 0) }}</div>
-                <div class="grillas-celdas-2 justify-end ">{{ number_format($it['pend_desc'], 0) }}</div>
-                <div class="grillas-celdas-2 justify-end ">{{ number_format($it['saldo_ctrl_stock'], 0) }}</div>
-                <div class="grillas-celdas-2 justify-end ">{{ number_format($it['cant_comp_stock'], 0) }}</div>
-                <div class="grillas-celdas-2 justify-end ">{{ number_format($it['aRecibir'], 0) }}</div>
-                <div class="grillas-celdas-2 justify-end ">{{ number_format($it['faltante'], 0) }}</div>
-                <div class="grillas-celdas-2 justify-end ">INGR</div>
-                <div class="grillas-celdas-2 justify-end">{{ number_format($it['impoDolariz'], 2) }}</div>
-                <div class="grillas-celdas-2 justify-end pr-2">{{ number_format($it['precLista'], 2) }}</div>                
-                @switch($it['colorCelda'])
+                <div class="grillas-celdas-2">{{ $it->nro_pedido }}</div>
+                <div class="grillas-celdas-2">{{ $it->cod_artic }}</div>
+                <div class="grillas-celdas-2">{{ $it->descrip }}</div>
+                <div class="grillas-celdas-2 justify-end ">{{ $it->renglon }}</div>
+                <div class="grillas-celdas-2 justify-end ">{{ number_format($it->cant_pedida, 0) }}</div>
+                <div class="grillas-celdas-2 justify-end ">{{ number_format($it->pend_desc, 0) }}</div>
+                <div class="grillas-celdas-2 justify-end ">{{ number_format($it->saldo_ctrl_stock, 0) }}</div>
+                <div class="grillas-celdas-2 justify-end ">{{ number_format($it->cant_comp_stock, 0) }}</div>
+                <div class="grillas-celdas-2 justify-end ">{{ number_format($it->aRecibir, 0) }}</div>
+                <div class="grillas-celdas-2 justify-end ">{{ number_format($it->faltante, 0) }}</div>
+                <div class="grillas-celdas-2 justify-end ">{{ number_format($it->t1_cantidad, 0) }}</div>                
+                <div class="grillas-celdas-2 justify-end">{{ number_format($it->impoDolariz, 2) }}</div>
+                <div class="grillas-celdas-2 justify-end pr-2">{{ number_format($it->precLista, 2) }}</div>                
+                @switch($it->colorCelda)
                     @case(1)
-                        <div class="grillas-celdas-3-1 justify-center pr-2">{{ number_format($it['difPorcentual'], 2) }}%</div>
+                        <div class="grillas-celdas-3-1 justify-center pr-2">{{ number_format($it->difPorcentual, 2) }}%</div>
                         @break
                     @case(2)
-                        <div class="grillas-celdas-3-2 justify-center pr-2">{{ number_format($it['difPorcentual'], 2) }}%</div>                
+                        <div class="grillas-celdas-3-2 justify-center pr-2">{{ number_format($it->difPorcentual, 2) }}%</div>                
                         @break            
                     @case(3)
-                        <div class="grillas-celdas-3-3 justify-center pr-2">{{ number_format($it['difPorcentual'], 2) }}%</div>
+                        <div class="grillas-celdas-3-3 justify-center pr-2">{{ number_format($it->difPorcentual, 2) }}%</div>
                         @break
                     @default
-                        <div class="grillas-celdas-2 justify-center pr-2">{{ number_format($it['difPorcentual'], 2) }}%</div>
+                        <div class="grillas-celdas-2 justify-center pr-2">{{ number_format($it->difPorcentual, 2) }}%</div>
                 @endswitch
-                <div class="grillas-celdas-2 justify-center">{{ $it['codEstado'] }}</div>
-                <div class="grillas-celdas-2 justify-center"> {{ $it['fecModifEstado'] ? \Carbon\Carbon::parse($it['fecModifEstado'])->format('d/m/Y') : '' }}</div>
-                <div class="grillas-celdas-2 justify-center">{{ $it['user'] }}</div>
-                <div class="grillas-celdas-2">{{ $it['comentarios'] }}</div>                                
-                <div class="grillas-celdas-2 justify-center">{{ $it['compras_feccompra'] ? \Carbon\Carbon::parse($it['compras_feccompra'])->format('d/m/Y') : ''    }}</div>
-                <div class="grillas-celdas-2 justify-center">{{ $it['compras_fecmodif'] ? \Carbon\Carbon::parse($it['compras_fecmodif'])->format('d/m/Y') : ''    }}</div>
-                <div class="grillas-celdas-2">{{ $it['compras_comentrarios'] }}</div>
-                <div class="grillas-celdas-2 justify-center">{{ $it['fec_pedido'] ? \Carbon\Carbon::createFromFormat('d/m/Y H:i:s', $it['fec_pedido'])->format('d/m/Y') : '' }} </div>
-                <div class="grillas-celdas-2 justify-center">{{ $it['plan_entrega'] ? \Carbon\Carbon::createFromFormat('d/m/Y H:i:s', $it['plan_entrega'])->format('d/m/Y') : '' }} </div>
-                <div class="grillas-celdas-2 justify-center">{{ $it['difDiasPlanEntrega'] }}</div>
-                <div class="grillas-celdas-2 justify-center ">{{ $it['cod_vend'] }}</div>
-                <div class="grillas-celdas-2">{{ $it['raz_social'] }}</div>
-                <div class="grillas-celdas-2 justify-end">{{ $it['nro_o_compra'] }}</div>
-            @endforeach        
+
+                <div class="grillas-celdas-2 justify-center">
+                    @switch($it->codEstado)
+                        @case(1)
+                            PAD
+                            @break
+                        @case(2)
+                            PAC
+                            @break
+                        @case(3)
+                            NAP
+                            @break
+                        @default
+                            {{-- vacío --}}
+                    @endswitch
+                </div>
+
+                <div class="grillas-celdas-2 justify-center"> {{ $it->fecModifEstado ? \Carbon\Carbon::parse($it->fecModifEstado)->format('d/m/Y') : '' }}</div>
+                <div class="grillas-celdas-2 justify-center">{{ $it->user }}</div>
+                <div class="grillas-celdas-2">{{ $it->comentarios }}</div>
+                <div class="grillas-celdas-2 justify-center">{{ $it->compras_feccompra ? \Carbon\Carbon::parse($it->compras_feccompra)->format('d/m/Y') : ''}}</div>
+                <div class="grillas-celdas-2 justify-center">{{ $it->compras_fecmodif ? \Carbon\Carbon::parse($it->compras_fecmodif)->format('d/m/Y') : ''}}</div>
+                <div class="grillas-celdas-2">{{ $it->compras_comentrarios }}</div>
+                <div class="grillas-celdas-2 justify-center">{{ $it->fec_pedido ? \Carbon\Carbon::createFromFormat('Y-m-d', $it->fec_pedido)->format('d/m/Y') : '' }} </div>
+                <div class="grillas-celdas-2 justify-center">{{ $it->plan_entrega ? \Carbon\Carbon::createFromFormat('Y-m-d', $it->plan_entrega)->format('d/m/Y') : '' }} </div>
+                <div class="grillas-celdas-2 justify-center">{{ $it->difDiasPlanEntrega }}</div>
+                <div class="grillas-celdas-2 justify-center">{{ $it->cod_vend }}</div>
+                <div class="grillas-celdas-2">{{ $it->raz_social }}</div>
+                <div class="grillas-celdas-2 justify-end">{{ $it->nro_o_compra }}</div>
+            @endforeach
 
         </div>
     </div>

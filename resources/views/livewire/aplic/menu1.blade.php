@@ -2,10 +2,28 @@
     <header>
         <nav class="px-5 bg-blue-950">
 
-            <div class="flex h-16 lg:h-[95px] max-w-6xl mx-auto items-center justify-between">
+            <div class="flex h-16 lg:h-[95px] max-w-6xl mx-auto items-center justify-end">
 
                 <div>
-                  <span class="text-white font-bold" >Usuario Activo: {{ Auth::user()->name }} </span>                  
+                    <span class="text-white font-bold">
+                        Usuario:
+                        @switch(Auth::user()->name)
+                            @case('CYP')
+                                COMPRAS
+                                @break
+                            @case('VTAS')
+                                VENTAS
+                                @break
+                            @case('DEP')
+                                DEPOSITO
+                                @break
+                            @case('SEB')
+                                SEB
+                                @break
+                            @default
+                                {{ Auth::user()->name }}
+                        @endswitch
+                    </span>
                 </div>
 
                 
@@ -27,7 +45,7 @@
                 <div class="hidden ml-8 space-x-8 lg:flex">
                   <form action="{{ route('CerrarSesion') }}" method="POST">
                         @csrf
-                        <button type="submit" class="btn-uno">
+                        <button type="submit" class="btn-uno cursor-pointer">
                               <span>Cerrar Sesión</span>
                         </button>
 

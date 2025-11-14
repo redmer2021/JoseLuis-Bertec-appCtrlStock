@@ -6,12 +6,12 @@
     @livewire('aplic.menu1')
 
     <!-- Menu lateral (apilado debajo) -->
-    <div class="bg-amber-700 pl-2 py-2">
+    <div class="bg-[#7092be] pl-2 py-2 mb-[2px]">
         @livewire('aplic.menulat')
     </div>
 
     <!-- Contenido principal que ocupa lo que sobra -->
-    <div class="p-4 bg-blue-300 flex-1 overflow-auto">
+    <div class=" bg-blue-300 flex-1 overflow-auto">
         @livewire('aplic.contenidos')
     </div>
 </div>
