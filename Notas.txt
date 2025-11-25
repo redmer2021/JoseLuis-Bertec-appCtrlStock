@@ -11,8 +11,16 @@ Teamviewer
 ID:444314894
 Clave:Bertec24XX
 Usuario: Administrador
-Clave :  bertec2056
+Clave :bertec2056
 
+
+2025-10-01T00:00:00.000
+
+Escritorio Remoto:
+mstsc
+IP: 192.168.0.206
+Usuario: bertec.ddns.net\Administrador
+CLave:bertec2056
 
 Generar una clave hash
 php artisan tinker

@@ -143,9 +143,12 @@ class GeneradorTmp
     public static function TmpVentas($guid){
         // 🔹 Recuperar la fecha desde la sesión
         $fecIngresoStock = session('fechaIngresoStock');
+        // revisión stock dia anterior
+        $fecIngresoStock = \Carbon\Carbon::parse($fecIngresoStock)->format('d/m/Y') . ' 0:00:00';
 
         $listadoFinal = [];
         $list_ventas = DB::table('vta_bertec_01_pend_entrega')->get();
+
 
         foreach ($list_ventas as $ventas) {
             // Buscar stock del artículo
@@ -201,11 +204,43 @@ class GeneradorTmp
             $codCtrl=0;
             $difDiasPlanEntrega=0;
 
-            $fechaPlan = Carbon::createFromFormat('d/m/Y H:i:s', $ventas->plan_entrega);
-            $hoy = Carbon::now(); // Fecha actual
+
+            // $fechaPlan = Carbon::createFromFormat('d/m/Y H:i:s', $ventas->plan_entrega);
             
+            $rawFecha = trim($ventas->plan_entrega);
+            $fechaPlan = null;
+            // Evitar error si viene vacío
+            if (!empty($rawFecha)) {
+
+                // Intentar con varios formatos posibles
+                $formatos = [
+                    'd/m/Y H:i:s',
+                    'd/m/Y H:i',
+                    'd/m/Y', // por si viene sin hora
+                ];
+
+                foreach ($formatos as $formato) {
+                    try {
+                        $fechaPlan = Carbon::createFromFormat($formato, $rawFecha);
+                        break; // si funcionó, salir del loop
+                    } catch (\Exception $e) {
+                        // continuar probando
+                    }
+                }
+
+                // Si no coincidió ningún formato → setear null para evitar el error
+                if (!$fechaPlan) {
+                    $fechaPlan = null;
+                }
+            }
+
+            $hoy = Carbon::now(); // Fecha actual
             // Calcula la diferencia en días (puede ser positiva o negativa)
-            $difDiasPlanEntrega = (int) round($fechaPlan->diffInDays($hoy, false));
+            $difDiasPlanEntrega = $fechaPlan
+                ? (int) round($fechaPlan->diffInDays($hoy, false))
+                : 0;            
+            // $difDiasPlanEntrega = (int) round($fechaPlan->diffInDays($hoy, false));
+
             
             if ($dtosAudit){
                 $codEstado = $dtosAudit->codEstado;
@@ -236,16 +271,21 @@ class GeneradorTmp
                 $colorCelda = 3;
             }
 
-            // revisión stock dia anterior
-            $dtosStockDiaAnt = DB::table('bertec_01_stock_anterior')
-                ->select('t1_fecha_ingreso','t1_cod_articu','t1_cantidad')
+            // $dtosStockDiaAnt = DB::table('bertec_01_stock_anterior')
+            //     ->select('t1_fecha_ingreso','t1_cod_articu','t1_cantidad')
+            //     ->where('t1_cod_articu', $ventas->cod_artic)
+            //     ->where('t1_fecha_ingreso', $fecIngresoStock)
+            //     ->first();
+            
+            $t1_cantidad = 0;
+            $t1_cantidad = DB::table('bertec_01_stock_anterior')
                 ->where('t1_cod_articu', $ventas->cod_artic)
                 ->where('t1_fecha_ingreso', $fecIngresoStock)
-                ->first();
-            $t1_cantidad = 0;
-            if ($dtosStockDiaAnt){
-                $t1_cantidad = $dtosStockDiaAnt->t1_cantidad;
-            }
+                ->sum('t1_cantidad');
+
+            // if ($dtosStockDiaAnt){
+            //     $t1_cantidad = $dtosStockDiaAnt->t1_cantidad;
+            // }
 
             $listadoFinal[] = [
                 'nro_pedido' => $ventas->nro_pedido,
