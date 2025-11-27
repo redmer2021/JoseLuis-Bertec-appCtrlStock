@@ -203,10 +203,7 @@ class GeneradorTmp
             $codColor=2;
             $codCtrl=0;
             $difDiasPlanEntrega=0;
-
-
-            // $fechaPlan = Carbon::createFromFormat('d/m/Y H:i:s', $ventas->plan_entrega);
-            
+           
             $rawFecha = trim($ventas->plan_entrega);
             $fechaPlan = null;
             // Evitar error si viene vacío
@@ -238,9 +235,7 @@ class GeneradorTmp
             // Calcula la diferencia en días (puede ser positiva o negativa)
             $difDiasPlanEntrega = $fechaPlan
                 ? (int) round($fechaPlan->diffInDays($hoy, false))
-                : 0;            
-            // $difDiasPlanEntrega = (int) round($fechaPlan->diffInDays($hoy, false));
-
+                : 0;
             
             if ($dtosAudit){
                 $codEstado = $dtosAudit->codEstado;
@@ -271,21 +266,15 @@ class GeneradorTmp
                 $colorCelda = 3;
             }
 
-            // $dtosStockDiaAnt = DB::table('bertec_01_stock_anterior')
-            //     ->select('t1_fecha_ingreso','t1_cod_articu','t1_cantidad')
-            //     ->where('t1_cod_articu', $ventas->cod_artic)
-            //     ->where('t1_fecha_ingreso', $fecIngresoStock)
-            //     ->first();
+            if ($precLista && $impoDolariz == $precLista->precio && $impoDolariz != 0) {
+                $colorCelda = 1;
+            }
             
             $t1_cantidad = 0;
             $t1_cantidad = DB::table('bertec_01_stock_anterior')
                 ->where('t1_cod_articu', $ventas->cod_artic)
                 ->where('t1_fecha_ingreso', $fecIngresoStock)
                 ->sum('t1_cantidad');
-
-            // if ($dtosStockDiaAnt){
-            //     $t1_cantidad = $dtosStockDiaAnt->t1_cantidad;
-            // }
 
             $listadoFinal[] = [
                 'nro_pedido' => $ventas->nro_pedido,

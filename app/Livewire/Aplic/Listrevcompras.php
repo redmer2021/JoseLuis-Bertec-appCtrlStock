@@ -304,208 +304,29 @@ class Listrevcompras extends Component
         $query = DB::table('bertec_01_tmp_compras')
             ->where('usrGuid', Auth::user()->usrGuid)
             ->when($this->txtBuscaNroCompras != '', function ($q) {
-                $q->where('nro_compra', 'like', '%' . $this->txtBuscaNroCompras . '%');
+            $q->where('nro_compra', 'like', '%' . $this->txtBuscaNroCompras . '%');
             })
             ->when($this->txtBuscaDescArtic != '', function ($q) {
-                $q->where('descrip', 'like', '%' . $this->txtBuscaDescArtic . '%');
+            $q->where('descrip', 'like', '%' . $this->txtBuscaDescArtic . '%');
             })
             ->when($this->txtBuscaRazSocial != '', function ($q) {
-                $q->where('raz_social', 'like', '%' . $this->txtBuscaRazSocial . '%');
+            $q->where('raz_social', 'like', '%' . $this->txtBuscaRazSocial . '%');
             });
 
-            // Orden dinámico según variables
-            if (isset($this->ordenarComo1) && $this->ordenarComo1 !== 'sin') {
-                $query->orderBy('faltante', $this->ordenarComo1); // asc o desc
-            }
-
-            if (isset($this->ordenarComo2) && $this->ordenarComo2 !== 'sin') {
-                $query->orderBy('fecCompra1', $this->ordenarComo2); // asc o desc
-            }
-
-            // Ejecutar consulta final
-            $this->listRevCompras = $query->get();
-
+        // Orden dinámico según variables
+        if (isset($this->ordenarComo1) && $this->ordenarComo1 !== 'sin') {
+            $query->orderBy('faltante', $this->ordenarComo1); // asc o desc
         }
 
-    // protected function selectDatos_old($columOrden = 0){
-    //     $listadoFinal = [];
+        if (isset($this->ordenarComo2) && $this->ordenarComo2 !== 'sin') {
+            $query->orderBy('fecCompra1', $this->ordenarComo2); // asc o desc
+        }
+
+        // Ejecutar consulta final
+        $this->listRevCompras = $query->get();
+
+    }
         
-    //     // Normalizar textos (eliminar espacios a ambos lados)
-    //     $this->txtBuscaNroCompras   = trim($this->txtBuscaNroCompras);
-    //     $this->txtBuscaDescArtic  = trim($this->txtBuscaDescArtic);
-    //     $this->txtBuscaRazSocial    = trim($this->txtBuscaRazSocial);
-
-    //     // Construir query dinámica
-    //     $list_compras = DB::table('bertec_01_compras_pend')
-    //         ->when($this->txtBuscaNroCompras != '', function ($query) {
-    //             $query->where('nro_compra', 'like', '%' . $this->txtBuscaNroCompras . '%');
-    //         })
-    //         ->when($this->txtBuscaDescArtic != '', function ($query) {
-    //             $query->where('descrip', 'like', '%' . $this->txtBuscaDescArtic . '%');
-    //         })
-    //         ->when($this->txtBuscaRazSocial != '', function ($query) {
-    //             $query->where('raz_social', 'like', '%' . $this->txtBuscaRazSocial . '%');
-    //         })
-    //         ->get();
-
-    //     foreach ($list_compras as $compra) {
-    //         // Buscar stock del artículo
-    //         $stocks = DB::table('bertec_01_stock_depositos')
-    //             ->selectRaw('SUM(saldo_ctrl_stock) as total_saldo_ctrl_stock, SUM(cant_comp_stock) as total_cant_comp_stock')
-    //             ->where('cod_artic', $compra->cod_artic)
-    //             ->first();
-            
-    //         // Buscar datos de auditoría en bertec_01_control_compras
-    //         $dtosAudit = DB::table('bertec_01_control_compras')
-    //             ->select('fecCompra1','fecCompra2','fecModif','comentarios1', 'comentarios2', 'unidades1', 'unidades2', 'entregaParc', 'user')
-    //             ->where('nroComprobante', $compra->nro_compra)
-    //             ->where('codArticulo', $compra->cod_artic)
-    //             ->first();
-            
-    //         $fecCompra1='';
-    //         $fecCompra2='';
-    //         $fecModif='';
-    //         $comentarios1='';
-    //         $comentarios2='';
-    //         $unidades1=0;
-    //         $unidades2=0;
-    //         $entregaParc='';
-    //         $user='';
-
-    //         $faltante = max(0, $stocks->total_cant_comp_stock - $stocks->total_saldo_ctrl_stock - $compra->cant_pendiente);
-
-    //         if ($faltante<0)
-    //             $faltante=0;
-
-    //         if ($dtosAudit){
-    //             $fecCompra1 = $dtosAudit->fecCompra1;
-    //             $fecCompra2 = $dtosAudit->fecCompra2;
-    //             $fecModif = $dtosAudit->fecModif;
-    //             $comentarios1 = $dtosAudit->comentarios1;
-    //             $comentarios2 = $dtosAudit->comentarios2;
-    //             $unidades1 = $dtosAudit->unidades1;
-    //             $unidades2 = $dtosAudit->unidades2;
-    //             $entregaParc = $dtosAudit->entregaParc;
-    //             $user = $dtosAudit->user;
-    //         }
-
-    //         $listadoFinal[] = [
-    //             // Campos de compras
-    //             'nro_compra'     => $compra->nro_compra,
-    //             'cod_artic'      => $compra->cod_artic,
-    //             'descripcion'    => $compra->descrip,
-    //             'raz_social'     => $compra->raz_social,
-    //             'cant_pedida'    => $compra->cant_pedida,
-    //             'cant_recibida'  => $compra->cant_recibida,
-    //             'cant_pendiente' => $compra->cant_pendiente,
-    //             'moneda' => $compra->moneda,
-    //             'cotiz' => $compra->cotiz,
-    //             'fec_emision' => $compra->fec_emision,
-    //             'fec_entrega' => $compra->fec_entrega,
-    //             'faltante' => $faltante,
-                
-    //             // dtos de auditoria
-    //             'fecCompra1' => $fecCompra1,
-    //             'fecCompra2' => $fecCompra2,
-    //             'fecModif' => $fecModif,
-    //             'comentarios1' => $comentarios1,
-    //             'comentarios2' => $comentarios2,
-    //             'unidades1' => $unidades1,
-    //             'unidades2' => $unidades2,
-    //             'entregaParc' => $entregaParc,
-    //             'user' => $user,
-
-    //             // Campos de stock
-    //             'saldo_ctrl_stock'  => $stocks->total_saldo_ctrl_stock,
-    //             'cant_comp_stock'   => $stocks->total_cant_comp_stock
-    //         ];
-    //     }
-
-
-    //     // Generar un GUID único para identificar este lote
-    //     $usrGuid = (string) Str::uuid();
-
-    //     // Insertar todos los registros del vector en la tabla temporal
-    //     foreach ($listadoFinal as $item) {
-    //         DB::table('bertec_01_compras_tmp')->insert([
-    //             'usrGuid'           => $usrGuid,
-    //             'nro_compra'        => $item['nro_compra'],
-    //             'cod_artic'         => $item['cod_artic'],
-    //             'descripcion'       => $item['descripcion'],
-    //             'raz_social'        => $item['raz_social'],
-    //             'cant_pedida'       => $item['cant_pedida'] ?? 0,
-    //             'cant_recibida'     => $item['cant_recibida'] ?? 0,
-    //             'cant_pendiente'    => $item['cant_pendiente'] ?? 0,
-    //             'moneda'            => $item['moneda'],
-    //             'cotiz'             => $item['cotiz'] ?? 0,
-    //             'fec_emision'       => $this->parseFecha($item['fec_emision']),
-    //             'fec_entrega'       => $this->parseFecha($item['fec_entrega']),
-    //             'faltante'          => $item['faltante'] ?? 0,
-    //             'fecCompra1'        => $this->parseFecha($item['fecCompra1']),
-    //             'fecCompra2'        => $this->parseFecha($item['fecCompra2']),
-    //             'fecModif'          => $this->parseFecha($item['fecModif']),
-    //             'comentarios1'      => $item['comentarios1'] ?? '',
-    //             'comentarios2'      => $item['comentarios2'] ?? '',
-    //             'unidades1'         => $item['unidades1'] ?? 0,
-    //             'unidades2'         => $item['unidades2'] ?? 0,
-    //             'entregaParc'       => $item['entregaParc'] === '' ? 0 : $item['entregaParc'], // 🔹 clave
-    //             'user'              => $item['user'] ?? '',
-    //             'saldo_ctrl_stock'  => $item['saldo_ctrl_stock'] ?? 0,
-    //             'cant_comp_stock'   => $item['cant_comp_stock'] ?? 0,
-    //         ]);
-    //     }
-
-
-    //     if ($columOrden == 1){
-    //         $this->ordenarComo2 = 'sin';
-    //         $orden = ($this->ordenarComo1 == 'desc') ? 'desc' : 'asc';
-    //         usort($listadoFinal, function($a, $b) use ($orden) {
-    //             $fechaA = strtotime($a['fecCompra1']);
-    //             $fechaB = strtotime($b['fecCompra1']);
-    
-    //             if ($orden === 'asc') {
-    //                 return $fechaA <=> $fechaB; // Ascendente
-    //             } else {
-    //                 return $fechaB <=> $fechaA; // Descendente
-    //             }
-    //         });
-    //     } else if ($columOrden == 2){
-    //         $this->ordenarComo1 = 'sin';
-    //         $orden = ($this->ordenarComo2 == 'desc') ? 'desc' : 'asc';
-    //         usort($listadoFinal, function($a, $b) use ($orden) {
-    //             $estA = $a['faltante'];
-    //             $estB = $b['faltante'];
-    //             if ($orden === 'asc') {
-    //                 return $estA <=> $estB; // Ascendente
-    //             } else {
-    //                 return $estB <=> $estA; // Descendente
-    //             }
-    //         });
-    //     }
-
-    //     $this->listRevCompras = $listadoFinal;
-    // }
-
-    // protected function parseFecha($valor)
-    // {
-    //     if (empty($valor)) {
-    //         return null;
-    //     }
-
-    //     // Intentar varios formatos posibles
-    //     $formatos = ['d/m/Y H:i:s', 'd/m/Y'];
-
-    //     foreach ($formatos as $formato) {
-    //         try {
-    //             return Carbon::createFromFormat($formato, $valor)->format('Y-m-d');
-    //         } catch (\Exception $e) {
-    //             // sigue probando
-    //         }
-    //     }
-
-    //     return null; // si ninguno coincide
-    // }    
-
     public function mount()
     {
         $this->selectDatos();
