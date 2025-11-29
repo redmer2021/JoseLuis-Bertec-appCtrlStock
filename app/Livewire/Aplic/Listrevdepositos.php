@@ -255,12 +255,13 @@ class Listrevdepositos extends Component
         // Orden dinámico según variables
         if (isset($this->ordenarComo1) && $this->ordenarComo1 !== 'sin') {
             $query->orderBy('t1_cantidad', $this->ordenarComo1); // asc o desc
-        }
-        if (isset($this->ordenarComo2) && $this->ordenarComo2 !== 'sin') {
+        } else if (isset($this->ordenarComo2) && $this->ordenarComo2 !== 'sin') {
             $query->orderBy('plan_entrega', $this->ordenarComo2); // asc o desc
-        }
-        if (isset($this->ordenarComo3) && $this->ordenarComo3 !== 'sin') {
+        } else if (isset($this->ordenarComo3) && $this->ordenarComo3 !== 'sin') {
             $query->orderBy('difDiasPlanEntrega', $this->ordenarComo3); // asc o desc
+        } else {
+            $query->orderBy('nro_pedido', 'asc')
+                ->orderBy('renglon', 'asc');
         }
         
         $this->listaRevDepositos = $query->get();
