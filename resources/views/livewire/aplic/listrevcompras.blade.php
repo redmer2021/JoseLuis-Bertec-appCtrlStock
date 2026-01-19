@@ -12,8 +12,8 @@
             <span>Recuperando datos...</span>
         </div>
     </div>
-    <!--                                           1    2     3     4     5    6    7    8    9    10    11    12    13    14    15    16 -->
-    <div class="sticky top-0 grid gap-1 grid-cols-[50px_130px_135px_300px_60px_60px_60px_60px_80px_100px_100px_140px_100px_300px_100px_250px]">
+    <!--                                           1    2     3     4     5    6    7    8    9    10    11    12    13    14    15    16   17           -->
+    <div class="sticky top-0 grid gap-1 grid-cols-[50px_130px_135px_300px_60px_60px_60px_60px_80px_100px_100px_140px_60px_100px_300px_100px_250px]">
         <div class="grillas-celdas-1-1">edit</div>              <!--1-->
         <div class="grillas-celdas-1-1">Nro.PED.COMPRA</div>    <!--2-->
         <div class="grillas-celdas-1-1">ARTICULO</div>          <!--3-->
@@ -26,10 +26,11 @@
         <div class="grillas-celdas-1-1">FE EM OC</div>          <!--10-->
         <div class="grillas-celdas-1-1">F.ENTR OC</div>         <!--11-->
         <div class="grillas-celdas-1-1">F.ENTR MOD</div>        <!--12-->
-        <div class="grillas-celdas-1-1">F.MOD</div>             <!--13-->
-        <div class="grillas-celdas-1-1">COMENTARIOS</div>       <!--14-->
-        <div class="grillas-celdas-1-1">USER</div>              <!--15-->
-        <div class="grillas-celdas-1-1">PROVEEDOR</div>         <!--16-->
+        <div class="grillas-celdas-1-1">EN 1</div>              <!--13-->
+        <div class="grillas-celdas-1-1">F.MOD</div>             <!--14-->
+        <div class="grillas-celdas-1-1">COMENTARIOS</div>       <!--15-->
+        <div class="grillas-celdas-1-1">USER</div>              <!--16-->
+        <div class="grillas-celdas-1-1">PROVEEDOR</div>         <!--17-->
     </div>        
 
     <span class="font-bold md:text-[1.5rem] block mt-[1rem] ml-[1rem]">COMPRAS</span>
@@ -78,16 +79,25 @@
     </div>
 
     <div>
-        <!--                              1    2     3     4     5    6    7    8    9    10    11    12    13    14    15    16 -->
-        <div class="grid gap-1 grid-cols-[50px_130px_135px_300px_60px_60px_60px_60px_80px_100px_100px_140px_100px_300px_100px_250px]">
+        <!--                              1    2     3     4     5    6    7    8    9    10    11    12    13    14    15    16   17-->
+        <div class="grid gap-1 grid-cols-[50px_130px_135px_300px_60px_60px_60px_60px_80px_100px_100px_140px_60px_100px_300px_100px_250px]">
+            <!-- 1 -->
             <div class="grillas-celdas-1">edit</div>
+            <!-- 2 -->
             <div class="grillas-celdas-1">Nro.PED.COMPRA</div>
+            <!-- 3 -->
             <div class="grillas-celdas-1">ARTICULO</div>
+            <!-- 4 -->
             <div class="grillas-celdas-1">DESCRIPCION</div>
+            <!-- 5 -->
             <div class="grillas-celdas-1">PEDIDA</div>
+            <!-- 6 -->
             <div class="grillas-celdas-1">PEND</div>
+            <!-- 7 -->
             <div class="grillas-celdas-1">STOCK</div>
+            <!-- 8 -->
             <div class="grillas-celdas-1">COMPR.</div>
+            <!-- 9 -->
             <div wire:click="Reordenar(1)" class="cursor-pointer grillas-celdas-1 !justify-between">
                 <span>
                     FALT.
@@ -100,8 +110,11 @@
                     <img src="{{ asset('imgs/orden-ascendente.png') }}" alt="Orden" class="h-5 w-5">
                 @endif
             </div>
+            <!-- 10 -->
             <div class="grillas-celdas-1">FE EM OC</div>
+            <!-- 11 -->
             <div class="grillas-celdas-1">F.ENTR OC</div>
+            <!-- 12 -->
             <div wire:click="Reordenar(2)" class="grillas-celdas-1 !justify-between cursor-pointer">
                 <span>
                     F.ENTR MOD
@@ -114,14 +127,21 @@
                     <img src="{{ asset('imgs/orden-ascendente.png') }}" alt="Orden" class="h-5 w-5">
                 @endif
             </div>
+            <!-- 13 -->
+            <div class="grillas-celdas-1">EN 1</div>
+            <!-- 14 -->
             <div class="grillas-celdas-1">F.MOD</div>
+            <!-- 15 -->
             <div class="grillas-celdas-1">COMENTARIOS</div>
+            <!-- 16 -->
             <div class="grillas-celdas-1">USER</div>
+            <!-- 17 -->
             <div class="grillas-celdas-1">PROVEEDOR</div>
         
             @foreach ($listRevCompras as $it)
+                <!-- 1 -->
                 @if (in_array(auth()->user()->name, ['CYP', 'VTAS']))
-                    <div wire:click="Editar('{{ $it->nro_compra }}', '{{ $it->cod_artic }}', '{{ $it->cant_pendiente }}', '{{ $it->descrip }}' )" class="cursor-pointer grillas-celdas-2 flex justify-center items-center">
+                    <div wire:click="Editar('{{ $it->nro_compra }}', '{{ $it->cod_artic }}', '{{ $it->cant_pendiente }}', '{{ $it->descrip }}', {{ $it->cant_pedida }}, {{ $it->cant_pendiente }}, '{{ \Carbon\Carbon::createFromFormat('Y-m-d', $it->fec_entrega)->format('d/m/Y') }}' )" class="cursor-pointer grillas-celdas-2 flex justify-center items-center">
                         <img src="{{ asset('imgs/editar.png') }}" alt="Compras pendientes" class="w-[1rem]" />
                     </div>
                 @else
@@ -130,16 +150,27 @@
                     </div>
                 @endif
     
+                <!-- 2 -->
                 <div class="grillas-celdas-2">{{ $it->nro_compra }}</div>
+                <!-- 3 -->
                 <div class="grillas-celdas-2">{{ $it->cod_artic }}</div>
+                <!-- 4 -->
                 <div class="grillas-celdas-2">{{ $it->descrip }}</div>
+                <!-- 5 -->
                 <div class="grillas-celdas-2 justify-end">{{ number_format($it->cant_pedida, 0)  }}</div>
+                <!-- 6 -->
                 <div class="grillas-celdas-2 justify-end">{{ number_format($it->cant_pendiente, 0)  }}</div>
+                <!-- 7 -->
                 <div class="grillas-celdas-2 justify-end">{{ number_format($it->saldo_ctrl_stock, 0)  }}</div>
+                <!-- 8 -->
                 <div class="grillas-celdas-2 justify-end">{{ number_format($it->cant_comp_stock, 0)  }}</div>
+                <!-- 9 -->
                 <div class="grillas-celdas-2 justify-end">{{ number_format($it->faltante, 0)  }}</div>
+                <!-- 10 -->
                 <div class="grillas-celdas-2 justify-center">{{ \Carbon\Carbon::createFromFormat('Y-m-d', $it->fec_emision)->format('d/m/Y') }}</div>
+                <!-- 11 -->
                 <div class="grillas-celdas-2 justify-center">{{ \Carbon\Carbon::createFromFormat('Y-m-d', $it->fec_entrega)->format('d/m/Y') }}</div>
+                <!-- 12 -->
                 <div class="grillas-celdas-2 flex justify-between !px-6">
                     {{ $it->fecCompra1 
                         ? \Carbon\Carbon::parse($it->fecCompra1)->format('d/m/Y') 
@@ -148,15 +179,23 @@
                             <img src="{{ asset('imgs/entregas-multiple.png') }}" alt="Multiple Entrega" class="w-[1rem]" />
                         @endif
                 </div>
+                <!-- 13 -->
+                <div class="grillas-celdas-2 justify-center">
+                    {{ $it->unidades1 }}
+                </div>
 
+                <!-- 14 -->
                 <div class="grillas-celdas-2 justify-center">
                     {{ $it->fecModif
                         ? \Carbon\Carbon::parse($it->fecModif)->format('d/m/Y') 
                         : '' }}                                        
                 </div>
 
+                <!-- 15 -->
                 <div class="grillas-celdas-2">{{ $it->comentarios1 }}</div>
+                <!-- 16 -->
                 <div class="grillas-celdas-2">{{ $it->user }}</div>
+                <!-- 17 -->
                 <div class="grillas-celdas-2">{{ $it->raz_social }}</div>
             @endforeach        
         </div>        
@@ -190,7 +229,13 @@
                 <div class="py-2 flex justify-end">
                     <label class="cursor-pointer mr-2" for="op2">{{ $varDescArticulo }}</label>
                     <input class="cursor-pointer" wire:model="asignardtos_a" value="2" id="op2" type="radio" name="asignardtos_a">
-                </div>                
+                </div>
+                <div class="col-span-3 flex justify-between px-2 py-3">
+                    <span>CANT. PED: {{ $cantPedida }}</span>
+                    <span>CANT. PEND: {{ $cantPendiente }}</span>
+                    <span>FEC. ENTR. OC: {{ $f_entrega_oc }}</span>
+                </div>
+                
                 @error('asignardtos_a')
                     <div class="col-span-3 flex justify-center mb-2">
                         <span class="block text-red-600 mt-1">{{$message}}</span>

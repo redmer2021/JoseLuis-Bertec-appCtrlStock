@@ -36,6 +36,11 @@ class Listrevcompras extends Component
     public $entregaParc;
     public $cant_pendientes=0;
 
+    public $cantPedida=0;
+    public $cantPendiente=0;
+    public $f_entrega_oc = '';
+    
+
     public function ExportExcel(){
         // Guardar los valores actuales en la sesión
         session()->put('txtBuscaNroCompras', $this->txtBuscaNroCompras);
@@ -256,12 +261,15 @@ class Listrevcompras extends Component
         ]);
     }
 
-    public function Editar($param1, $param2, $param3, $param4){
+    public function Editar($param1, $param2, $param3, $param4, $param5, $param6, $param7){
         $this->resetErrorBag();
-        $this->varComprobante = $param1;
-        $this->varCodArticulo = $param2;
-        $this->cant_pendientes = $param3;
-        $this->varDescArticulo = $param4;
+        $this->varComprobante   = $param1;
+        $this->varCodArticulo   = $param2;
+        $this->cant_pendientes  = $param3;
+        $this->varDescArticulo  = $param4;
+        $this->cantPedida       = $param5;
+        $this->cantPendiente    = $param6;
+        $this->f_entrega_oc     = $param7;
 
         // Buscar datos de auditoría en bertec_01_control_compras
         $dtosAudit = DB::table('bertec_01_control_compras')

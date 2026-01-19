@@ -37,8 +37,8 @@
                     <p class="mt-2 text-sm text-red-600 "><span class="font-medium">{{ $errors->first('email') }}</p>
                 @else
                     <label for="email" class="block mb-2 text-sm font-medium text-gray-900 ">Email</label>
-                    {{-- <input value="{{ old('email') }}" type="email" autofocus name="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="name@company.com"> --}}
-                    <input value="compras@bertec.com.ar" type="email" autofocus name="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="name@company.com">
+                    <input value="{{ old('email') }}" type="email" autofocus name="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="name@company.com">
+                    {{-- <input value="compras@bertec.com.ar" type="email" autofocus name="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="name@company.com"> --}}
                 @endif
             </div>
             <div>
@@ -48,8 +48,8 @@
                     <p class="mb-4 mt-2 text-sm text-red-600 "><span class="font-medium">{{ $errors->first('password') }}</p>
                 @else
                     <label for="password" class="block mb-2 text-sm font-medium text-gray-900 ">Contraseña</label>
-                    {{-- <input type="password" name="password" id="password" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 "> --}}
-                    <input value="compras_2025" type="password" name="password" id="password" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 ">
+                    <input type="password" name="password" id="password" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 ">
+                    {{-- <input value="compras_2025" type="password" name="password" id="password" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 "> --}}
                 @endif
             </div>
             <!-- Bloque STOCK F.IN -->

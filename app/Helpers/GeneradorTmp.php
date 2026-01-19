@@ -269,6 +269,15 @@ class GeneradorTmp
             if ($precLista && $impoDolariz == $precLista->precio && $impoDolariz != 0) {
                 $colorCelda = 1;
             }
+
+            if (
+                $precLista !== null &&
+                $impoDolariz > 0 &&
+                $precLista->precio > 0 &&
+                $impoDolariz > $precLista->precio
+            ) {
+                $colorCelda = 1;
+            }
             
             $t1_cantidad = 0;
             $t1_cantidad = DB::table('bertec_01_stock_anterior')

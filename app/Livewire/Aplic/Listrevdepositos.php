@@ -15,6 +15,7 @@ class Listrevdepositos extends Component
     public $ordenarComo1 = 'sin';
     public $ordenarComo2 = 'sin';
     public $ordenarComo3 = 'sin';
+    public $ordenarComo4 = 'sin';
     public $listaRevDepositos = [];
     public $verForm = false;
 
@@ -57,6 +58,7 @@ class Listrevdepositos extends Component
                 }
                 $this->ordenarComo2 = 'sin';
                 $this->ordenarComo3 = 'sin';
+                $this->ordenarComo4 = 'sin';
                 break;
             case 2:
                 if ($this->ordenarComo2 == 'sin'){
@@ -68,6 +70,7 @@ class Listrevdepositos extends Component
                 }
                 $this->ordenarComo1 = 'sin';
                 $this->ordenarComo3 = 'sin';
+                $this->ordenarComo4 = 'sin';
                 break;
             case 3:
                 if ($this->ordenarComo3 == 'sin'){
@@ -79,6 +82,19 @@ class Listrevdepositos extends Component
                 }
                 $this->ordenarComo1 = 'sin';
                 $this->ordenarComo2 = 'sin';
+                $this->ordenarComo4 = 'sin';
+                break;
+            case 4:
+                if ($this->ordenarComo4 == 'sin'){
+                    $this->ordenarComo4 = 'desc';
+                } else if ($this->ordenarComo4 == 'desc'){
+                    $this->ordenarComo4 = 'asc';
+                } else {
+                    $this->ordenarComo4 = 'sin';
+                }
+                $this->ordenarComo1 = 'sin';
+                $this->ordenarComo2 = 'sin';
+                $this->ordenarComo3 = 'sin';
                 break;
         }
         $this->selectDatos();
@@ -259,8 +275,11 @@ class Listrevdepositos extends Component
             $query->orderBy('plan_entrega', $this->ordenarComo2); // asc o desc
         } else if (isset($this->ordenarComo3) && $this->ordenarComo3 !== 'sin') {
             $query->orderBy('difDiasPlanEntrega', $this->ordenarComo3); // asc o desc
+        } else if (isset($this->ordenarComo4) && $this->ordenarComo4 !== 'sin') {
+            $query->orderBy('codEstado', $this->ordenarComo4); // asc o desc
         } else {
-            $query->orderBy('nro_pedido', 'asc')
+            $query->orderBy('difDiasPlanEntrega', 'desc')
+                ->orderBy('nro_pedido', 'asc')
                 ->orderBy('renglon', 'asc');
         }
         
