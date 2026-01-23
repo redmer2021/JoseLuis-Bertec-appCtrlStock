@@ -257,7 +257,7 @@
                 <!-- 1 -->
                 <div class="grillas-celdas-2 flex justify-center items-center">
                     @if (in_array(auth()->user()->name, ['CYP', 'VTAS']))
-                        <img wire:click="Editar('{{ $it->nro_pedido }}', '{{ $it->cod_artic }}', '{{ $it->descrip }}')" src="{{ asset('imgs/editar.png') }}" alt="Ventas" class="cursor-pointer hover:scale-105 w-[1rem]"/>
+                        <img wire:click="Editar('{{ $it->nro_pedido }}', '{{ $it->cod_artic }}', '{{ str_replace("'", "\\'", $it->descrip) }}')" src="{{ asset('imgs/editar.png') }}" alt="Ventas" class="cursor-pointer hover:scale-105 w-[1rem]"/>
                     @else
                         <img src="{{ asset('imgs/editar.png') }}" alt="Ventas" class="w-[1rem]"/>
                     @endif

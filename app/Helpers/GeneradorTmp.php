@@ -31,8 +31,28 @@ class GeneradorTmp
         $listadoFinal = [];
 
         //PROCESAMIENTO ARCHIVO COMPRAS
-        $list_compras = DB::table('bertec_01_compras_pend')->get();
-
+        //$list_compras = DB::table('bertec_01_compras_pend')->get();
+        $list_compras = DB::table('bertec_01_compras_pend as c')
+            ->joinSub(
+                DB::table('bertec_01_compras_pend')
+                    ->selectRaw("
+                        nro_compra,
+                        cod_artic,
+                        MIN(STR_TO_DATE(fec_emision, '%d/%m/%Y %H:%i:%s')) as fec_min
+                    ")
+                    ->groupBy('nro_compra', 'cod_artic'),
+                'x',
+                function ($join) {
+                    $join->on('c.nro_compra', '=', 'x.nro_compra')
+                        ->on('c.cod_artic', '=', 'x.cod_artic')
+                        ->whereRaw("STR_TO_DATE(c.fec_emision, '%d/%m/%Y %H:%i:%s') = x.fec_min");
+                }
+            )
+            ->orderBy('c.id')
+            ->get()
+            ->unique(fn($c) => $c->nro_compra.'|'.$c->cod_artic)
+        ->values();
+            
         foreach ($list_compras as $compra) {
             // Buscar stock del artículo
             $stocks = DB::table('bertec_01_stock_depositos')

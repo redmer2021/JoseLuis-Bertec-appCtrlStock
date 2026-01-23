@@ -62,5 +62,4 @@ class AutentController extends Controller
         return $redirect->to('/');
     }
 
-
 }
