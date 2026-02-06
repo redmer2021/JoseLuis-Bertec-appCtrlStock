@@ -167,8 +167,8 @@ class GeneradorTmp
         $fecIngresoStock = \Carbon\Carbon::parse($fecIngresoStock)->format('d/m/Y') . ' 0:00:00';
 
         $listadoFinal = [];
+        //todo: 05/02/2026 modificar esta consulta para agregar pje_desc
         $list_ventas = DB::table('vta_bertec_01_pend_entrega')->get();
-
 
         foreach ($list_ventas as $ventas) {
             // Buscar stock del artículo
@@ -203,8 +203,13 @@ class GeneradorTmp
                 $compras_comentrarios = $notasCompras->comentarios1;
             }
 
-            if (!empty($ventas->cotiza) && $ventas->cotiza != 0 && !empty($ventas->pend_factu) && $ventas->pend_factu != 0) {        
+            if (!empty($ventas->cotiza) && $ventas->cotiza != 0 && !empty($ventas->pend_factu) && $ventas->pend_factu != 0) {
                 $impoDolariz = ($ventas->importe / $ventas->pend_factu) / $ventas->cotiza;
+                
+                // Aplicar descuento si existe
+                if (!empty($ventas->pje_desc) && $ventas->pje_desc > 0 && $impoDolariz > 0) {
+                    $impoDolariz -= $impoDolariz * ($ventas->pje_desc / 100);
+                }
             } else {
                 $impoDolariz = 0;
             }

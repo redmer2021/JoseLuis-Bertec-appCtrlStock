@@ -28,6 +28,10 @@ php artisan tinker
     Hash::make('arma68on');
 exit
 
+clave de sql
+sa
+Axoft1988
+
 
 CYP:    (9cede822-9867-4b45-8f97-02013878fb2c)  compras_2025 - MODIFICA TODO MENOS CTRL - VE COMPRAS-VENTAS-DEPOSITO
 VTAS:   (7736760c-5fe5-4986-acc6-e4f38abcca0d)  ventas_2025 - MODIF ESTADO Y COMENT  DE VENTAS - VE VENTAS-DEPOSITO
