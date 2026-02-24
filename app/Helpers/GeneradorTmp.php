@@ -183,9 +183,15 @@ class GeneradorTmp
 
             $faltante = max(0, $stocks->total_cant_comp_stock - $stocks->total_saldo_ctrl_stock - $total_pendiente);
 
+            //se modifica esta columna en función de lo solicitado en mails dia 23/02/2026
+            //en columna aRecibir, se suma cant_pendiente
+            // $aRecibir = DB::table('bertec_01_compras_pend')
+            //     ->where('cod_artic', $ventas->cod_artic)
+            //     ->sum('cant_pedida');
+
             $aRecibir = DB::table('bertec_01_compras_pend')
                 ->where('cod_artic', $ventas->cod_artic)
-                ->sum('cant_pedida');
+                ->sum('cant_pendiente');
 
             $notasCompras = DB::table('bertec_01_control_compras')
                 ->select('fecCompra1', 'fecModif', 'comentarios1')
