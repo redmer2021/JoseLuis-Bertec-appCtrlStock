@@ -189,9 +189,14 @@ class GeneradorTmp
             //     ->where('cod_artic', $ventas->cod_artic)
             //     ->sum('cant_pedida');
 
+            //Modificado el 10/03 - se toma el primer registro
+            // $aRecibir = DB::table('bertec_01_compras_pend')
+            //     ->where('cod_artic', $ventas->cod_artic)
+            //     ->sum('cant_pendiente');
+
             $aRecibir = DB::table('bertec_01_compras_pend')
-                ->where('cod_artic', $ventas->cod_artic)
-                ->sum('cant_pendiente');
+            ->where('cod_artic', $ventas->cod_artic)
+            ->value('cant_pendiente');            
 
             $notasCompras = DB::table('bertec_01_control_compras')
                 ->select('fecCompra1', 'fecModif', 'comentarios1')

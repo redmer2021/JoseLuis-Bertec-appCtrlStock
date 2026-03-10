@@ -162,7 +162,9 @@ class DescargasController extends Controller
                 $nroVentas = session('txtBuscaNroVentas');
                 $descArtic = session('txtBuscaDescArtic');
                 $razSocial = session('txtBuscaRazSocial');
-                $fecIngresoStock = session('txtFecIngresoStock');
+                //$fecIngresoStock = session('txtFecIngresoStock');
+                $fecIngresoStock = session('fechaIngresoStock');
+                
 
                 // Construir query dinámica
                 $list_ventas = DB::table('vta_bertec_01_pend_entrega')
@@ -193,9 +195,15 @@ class DescargasController extends Controller
 
                     $faltante = max(0, $stocks->total_cant_comp_stock - $stocks->total_saldo_ctrl_stock - $total_pendiente);
 
+                    //se modificó el 04/03/2026 para que sea igual a como se muestra en pantalla
+                    // $aRecibir = DB::table('bertec_01_compras_pend')
+                    //     ->where('cod_artic', $ventas->cod_artic)
+                    //     ->sum('cant_pedida');
+                    
                     $aRecibir = DB::table('bertec_01_compras_pend')
-                        ->where('cod_artic', $ventas->cod_artic)
-                        ->sum('cant_pedida');
+                    ->where('cod_artic', $ventas->cod_artic)
+                    ->sum('cant_pendiente');
+    
 
                     $notasCompras = DB::table('bertec_01_control_compras')
                         ->select('fecCompra1', 'fecModif', 'comentarios1')
@@ -347,7 +355,9 @@ class DescargasController extends Controller
                 $descArtic = session('txtBuscaDescArtic');
                 $razSocial = session('txtBuscaRazSocial');
                 $nroOrdenCompra = session('txtBuscaNroOrdenCompra');
-                $fecIngresoStock = session('txtFecIngresoStock');
+                $fecIngresoStock = session('fechaIngresoStock');
+                //$fecIngresoStock = session('txtFecIngresoStock');
+                
 
                 $list_ventas = DB::table('bertec_01_pend_entrega')
                 ->when($nroVentas != '', function ($query) use($nroVentas) {
@@ -386,13 +396,16 @@ class DescargasController extends Controller
                     }
 
                     if ($codColor == 1){
-                        // revisión stock dia anterior
+
+                        $fecFormateada = Carbon::parse($fecIngresoStock)->format('d/m/Y');
                         $dtosStockDiaAnt = DB::table('bertec_01_stock_anterior')
                             ->select('t1_fecha_ingreso','t1_cod_articu','t1_cantidad')
                             ->where('t1_cod_articu', $ventas->cod_artic)
-                            ->where('t1_fecha_ingreso', $fecIngresoStock)                    
+                            ->where('t1_fecha_ingreso', 'like', $fecFormateada . '%')
                             ->first();
+    
                         $t1_cantidad = 0;
+
                         if ($dtosStockDiaAnt){
                             $t1_cantidad = $dtosStockDiaAnt->t1_cantidad;
                         }

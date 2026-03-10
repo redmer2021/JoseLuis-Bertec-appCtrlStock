@@ -287,7 +287,7 @@
                 <!-- 12 -->
                 <div class="grillas-celdas-2 justify-end ">{{ number_format($it->faltante, 0) }}</div>
                 <!-- 13 -->
-                <div class="grillas-celdas-2 justify-end ">{{ number_format($it->t1_cantidad, 0) }}</div>                
+                <div class="grillas-celdas-2 justify-end ">{{ number_format($it->t1_cantidad, 0) }}</div>
                 <!-- 14 -->
                 <div class="grillas-celdas-2 justify-end">{{ number_format($it->impoDolariz, 2) }}</div>
                 <!-- 15 -->

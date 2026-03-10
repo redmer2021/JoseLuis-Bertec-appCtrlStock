@@ -7,14 +7,10 @@ Usuario: c1351882
 Contraseña: vovila09FA
 
 Teamviewer
-
 ID:444314894
 Clave:Bertec24XX
 Usuario: Administrador
 Clave :bertec2056
-
-
-2025-10-01T00:00:00.000
 
 Escritorio Remoto:
 mstsc
@@ -22,15 +18,17 @@ IP: 192.168.0.206
 Usuario: bertec.ddns.net\Administrador
 CLave:bertec2056
 
+clave de sql
+sa
+Axoft1988
+
+
 Generar una clave hash
 php artisan tinker
     use Illuminate\Support\Facades\Hash;
     Hash::make('arma68on');
 exit
 
-clave de sql
-sa
-Axoft1988
 
 
 CYP:    (9cede822-9867-4b45-8f97-02013878fb2c)  compras_2025 - MODIFICA TODO MENOS CTRL - VE COMPRAS-VENTAS-DEPOSITO

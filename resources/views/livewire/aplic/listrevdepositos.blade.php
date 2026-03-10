@@ -229,6 +229,9 @@
                     @case(2)
                         <div class="grillas-celdas-2 justify-center !bg-red-400 !text-white">PAC</div>
                         @break
+                    @default
+                        <div class="grillas-celdas-2 justify-center !bg-red-400 !text-white"></div>
+                        @break
                 @endswitch
                 
                 <!-- 12 -->
